@@ -21,4 +21,12 @@ public class ErrorEntity {
     private String state;
     private LocalDateTime date;
 
+    public ErrorEntity(int code, String description, LocalTime duration, int occurences, String state, LocalDateTime date) {
+        this.code = code;
+        this.description = description;
+        this.duration = duration;
+        this.occurences = occurences;
+        this.state = state;
+        this.date = date;
+    }
 }

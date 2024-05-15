@@ -9,6 +9,6 @@ public interface ILogsService {
 
     List<LogsEntity> fetchAllLogs();
 
-    void save(MultipartFile file);
+    void save();
 
 }

@@ -32,10 +32,10 @@ public class LogsController {
 
     }
 
-    @PostMapping("/logsUpload")
-    public void uploadLogs(@RequestParam("file") MultipartFile file ){
+    @PostMapping("/")
+    public void uploadLogs( ){
         try {
-            logsService.save(file);
+
         }catch (Exception e){
             throw new RuntimeException("fail to upload csv data");
         }

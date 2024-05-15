@@ -9,6 +9,6 @@ public interface IErrorService {
 
     List<ErrorEntity> fetchAllErrors();
 
-    void save(MultipartFile file);
+    void save();
 
 }

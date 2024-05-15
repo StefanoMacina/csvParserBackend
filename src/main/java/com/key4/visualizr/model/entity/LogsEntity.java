@@ -13,7 +13,8 @@ public class LogsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int index;
+    @Column(name = "log_index")
+    private int log_index;
     private double bar_length;
     private double length;
     private boolean is_a_rest_piece;
@@ -32,8 +33,8 @@ public class LogsEntity {
     private boolean redone;
     private String redone_reason;
 
-    public LogsEntity(int index, double bar_length, double length, boolean is_a_rest_piece, String job_Code, String article, String barcode, String profile_code, String colour, LocalDateTime start_time, LocalDateTime end_time, double total_span, double total_producing_span, double overfeed, String operator, boolean completed, boolean redone, String redone_reason) {
-        this.index = index;
+    public LogsEntity(int log_index, double bar_length, double length, boolean is_a_rest_piece, String job_Code, String article, String barcode, String profile_code, String colour, LocalDateTime start_time, LocalDateTime end_time, double total_span, double total_producing_span, double overfeed, String operator, boolean completed, boolean redone, String redone_reason) {
+        this.log_index = log_index;
         this.bar_length = bar_length;
         this.length = length;
         this.is_a_rest_piece = is_a_rest_piece;

@@ -30,17 +30,14 @@ public class ErrorController {
         }
     }
 
-//    @PostMapping("/errorsUpload")
-//    public void uploadFile(
-//            @RequestParam("file") MultipartFile file
-//    )
-//    {
-//        try {
-//            errorService.save(file);
-//        }catch (Exception e){
-//
-//        }
-//    }
+    @PostMapping("/")
+    public void uploadFile() {
+        try {
+            errorService.save();
+        }catch (Exception ignored){
+
+        }
+    }
 
 
 }
