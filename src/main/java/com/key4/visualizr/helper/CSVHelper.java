@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -19,11 +20,14 @@ public class CSVHelper {
 
     public static final String LOGS_FILE_PATH = "/home/quark/Desktop/i4Parts_log.csv";
     public static final String ERROR_FILE_PATH = "/home/quark/Desktop/i4Error_log.csv";
+    final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
+    final static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public static List<LogsEntity> csvToLog() {
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(LOGS_FILE_PATH));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
+                        .withDelimiter(';')
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()
                         .withTrim());
@@ -36,14 +40,14 @@ public class CSVHelper {
                     int log_index = Integer.parseInt(csvRecord.get("Index"));
                     double bar_length = Double.parseDouble(csvRecord.get("Bar length"));
                     double length = Double.parseDouble(csvRecord.get("Length"));
-                    boolean restPiece = Boolean.parseBoolean(csvRecord.get("Is_a_rest_piece"));
+                    boolean restPiece = Boolean.parseBoolean(csvRecord.get("Is a rest piece"));
                     String jobCode = csvRecord.get("Job Code");
                     String article = csvRecord.get("Article");
                     String barcode = csvRecord.get("Barcode");
                     String profileCode = csvRecord.get("Profile code");
                     String colour = csvRecord.get("Colour");
-                    LocalDateTime startTime = LocalDateTime.parse("Start time");
-                    LocalDateTime endTime = LocalDateTime.parse("End time");
+                    LocalDateTime startTime = LocalDateTime.parse(csvRecord.get("Start time"),formatter);
+                    LocalDateTime endTime = LocalDateTime.parse(csvRecord.get("End time"), formatter);
                     double totalSpan = Double.parseDouble(csvRecord.get("Total span"));
                     double totalProducingSpan = Double.parseDouble(csvRecord.get("Total producing span"));
                     double overfeed = Double.parseDouble(csvRecord.get("Overfeed"));
@@ -51,13 +55,13 @@ public class CSVHelper {
                     boolean completed = Boolean.parseBoolean(csvRecord.get("Completed"));
                     boolean redone = Boolean.parseBoolean(csvRecord.get("Redone"));
                     String redoneReason = csvRecord.get("Redone reason");
-                    LocalDateTime arming_start = LocalDateTime.parse(csvRecord.get("Arming start time"));
-                    LocalDateTime arming_end = LocalDateTime.parse(csvRecord.get("Arming end time"));
-                    LocalTime arming_duration = LocalTime.parse(csvRecord.get("Arming duration"));
-                    LocalDateTime working_start = LocalDateTime.parse(csvRecord.get("Working start time"));
-                    LocalDateTime working_end = LocalDateTime.parse(csvRecord.get("Working end time"));
-                    LocalTime working_duration = LocalTime.parse(csvRecord.get("Working duration"));
-                LogsEntity logEntity = new LogsEntity(
+                    LocalDateTime arming_start = LocalDateTime.parse(csvRecord.get("Arming start time"), formatter);
+                    LocalDateTime arming_end = LocalDateTime.parse(csvRecord.get("Arming end time"), formatter);
+                    LocalTime arming_duration = LocalTime.parse(csvRecord.get("Arming duration"), timeFormatter);
+                    LocalDateTime working_start = LocalDateTime.parse(csvRecord.get("Working start time"), formatter);
+                    LocalDateTime working_end = LocalDateTime.parse(csvRecord.get("Working end time"), formatter);
+                    LocalTime working_duration = LocalTime.parse(csvRecord.get("Working duration"), timeFormatter);
+                    LogsEntity logEntity = new LogsEntity(
                     log_index,
                     bar_length,
                     length,
