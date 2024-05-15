@@ -15,7 +15,7 @@ public class LogsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "log_index")
+    @Column(name = "Log_index")
     private int log_index;
     @Column(name = "Bar length")
     private double bar_length;

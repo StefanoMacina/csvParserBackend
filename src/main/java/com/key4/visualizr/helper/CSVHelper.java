@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -31,8 +33,55 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+                    int log_index = Integer.parseInt(csvRecord.get("Index"));
+                    double bar_length = Double.parseDouble(csvRecord.get("Bar length"));
+                    double length = Double.parseDouble(csvRecord.get("Length"));
+                    boolean restPiece = Boolean.parseBoolean(csvRecord.get("Is_a_rest_piece"));
+                    String jobCode = csvRecord.get("Job Code");
+                    String article = csvRecord.get("Article");
+                    String barcode = csvRecord.get("Barcode");
+                    String profileCode = csvRecord.get("Profile code");
+                    String colour = csvRecord.get("Colour");
+                    LocalDateTime startTime = LocalDateTime.parse("Start time");
+                    LocalDateTime endTime = LocalDateTime.parse("End time");
+                    double totalSpan = Double.parseDouble(csvRecord.get("Total span"));
+                    double totalProducingSpan = Double.parseDouble(csvRecord.get("Total producing span"));
+                    double overfeed = Double.parseDouble(csvRecord.get("Overfeed"));
+                    String operator = csvRecord.get("Operator");
+                    boolean completed = Boolean.parseBoolean(csvRecord.get("Completed"));
+                    boolean redone = Boolean.parseBoolean(csvRecord.get("Redone"));
+                    String redoneReason = csvRecord.get("Redone reason");
+                    LocalDateTime arming_start = LocalDateTime.parse(csvRecord.get("Arming start time"));
+                    LocalDateTime arming_end = LocalDateTime.parse(csvRecord.get("Arming end time"));
+                    LocalTime arming_duration = LocalTime.parse(csvRecord.get("Arming duration"));
+                    LocalDateTime working_start = LocalDateTime.parse(csvRecord.get("Working start time"));
+                    LocalDateTime working_end = LocalDateTime.parse(csvRecord.get("Working end time"));
+                    LocalTime working_duration = LocalTime.parse(csvRecord.get("Working duration"));
                 LogsEntity logEntity = new LogsEntity(
-
+                    log_index,
+                    bar_length,
+                    length,
+                    restPiece,
+                    jobCode,
+                    article,
+                    barcode,
+                    profileCode,
+                    colour,
+                    startTime,
+                    endTime,
+                    totalSpan,
+                    totalProducingSpan,
+                    overfeed,
+                    operator,
+                    completed,
+                    redone,
+                    redoneReason,
+                    arming_start,
+                    arming_end,
+                    arming_duration,
+                    working_start,
+                    working_end,
+                    working_duration
                 );
 
                 logsEntities.add(logEntity);
@@ -40,8 +89,10 @@ public class CSVHelper {
 
             return logsEntities;
         } catch (IOException e){
-            throw new RuntimeException("error parsing partslog");
+            e.printStackTrace();
+           throw new RuntimeException("error parsing partslog");
         }
+
     }
 
     public static List<ErrorEntity> csvToError() {
