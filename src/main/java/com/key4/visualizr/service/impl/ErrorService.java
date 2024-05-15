@@ -1,10 +1,12 @@
 package com.key4.visualizr.service.impl;
 
+import com.key4.visualizr.helper.CSVHelper;
 import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.repository.ErrorRepository;
 import com.key4.visualizr.service.IErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,8 +22,12 @@ public class ErrorService implements IErrorService {
     }
 
     @Override
-    public List<ErrorEntity> saveAll(List<ErrorEntity> errorEntities){
-        return errorRepository.saveAll(errorEntities);
+    public void save(MultipartFile file) {
+        try {
+           List<ErrorEntity> errorEntities = CSVHelper.csvToTutorials(file.getInputStream());
+           errorRepository.saveAll(errorEntities);
+        } catch (Exception e) {
+            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+        }
     }
-
 }
