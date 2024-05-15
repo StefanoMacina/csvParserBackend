@@ -20,7 +20,8 @@ public class ErrorService implements IErrorService {
     }
 
     @Override
-    public ErrorEntity save(ErrorEntity errorEntity) {
-        return errorRepository.save(errorEntity);
+    public List<ErrorEntity> saveAll(List<ErrorEntity> errorEntities){
+        return errorRepository.saveAll(errorEntities);
     }
+
 }

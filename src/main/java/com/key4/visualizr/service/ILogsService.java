@@ -8,6 +8,6 @@ public interface ILogsService {
 
     List<LogsEntity> fetchAllLogs();
 
-    void save(LogsEntity logsEntity);
+    List<LogsEntity> saveAll(List<LogsEntity> logsEntities);
 
 }

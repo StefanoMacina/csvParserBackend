@@ -1,24 +1,14 @@
 package com.key4.visualizr.reader;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class CsvReader {
 
-    private final String src = "";
+    BufferedReader fileReader = new BufferedReader(new InputStreamReader());
 
-    CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
-
-    public void readCsv()  {
-
-
-    }
 }
 
 

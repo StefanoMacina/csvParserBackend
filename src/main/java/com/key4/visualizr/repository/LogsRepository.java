@@ -10,5 +10,4 @@ import java.util.List;
 public interface LogsRepository extends JpaRepository<LogsEntity, Integer> {
 
 
-
 }

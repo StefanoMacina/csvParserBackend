@@ -8,5 +8,6 @@ public interface IErrorService {
 
     List<ErrorEntity> fetchAllErrors();
 
-    ErrorEntity save(ErrorEntity errorEntity);
+    List<ErrorEntity> saveAll(List<ErrorEntity> errorsList);
+
 }

@@ -23,7 +23,7 @@ public class controller {
     @Autowired
     LogsService logsService;
 
-    @GetMapping("logs")
+    @GetMapping("/logs")
     public ResponseEntity<List<LogsEntity>> getAllLogs(){
         try {
             List<LogsEntity> logsList = logsService.fetchAllLogs();
@@ -38,7 +38,7 @@ public class controller {
 
     }
 
-    @GetMapping("errors")
+    @GetMapping("/errors")
     public ResponseEntity<List<ErrorEntity>> getAllErrors(){
         try{
             List<ErrorEntity> errorsList = errorService.fetchAllErrors();
