@@ -16,7 +16,7 @@ public class ErrorController {
     @Autowired
     ErrorService errorService;
 
-    @GetMapping("/errors")
+    @GetMapping("/errorlogs")
     public ResponseEntity<List<ErrorEntity>> getAllErrors(){
         try{
             List<ErrorEntity> errorsList = errorService.fetchAllErrors();
@@ -30,7 +30,7 @@ public class ErrorController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/errorsUpload")
     public void uploadFile() {
         try {
             errorService.save();

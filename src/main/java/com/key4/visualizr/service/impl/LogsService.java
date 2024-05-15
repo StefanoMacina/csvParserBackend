@@ -27,7 +27,7 @@ public class LogsService implements ILogsService {
             List<LogsEntity> logsEntities = CSVHelper.csvToLog();
             logsRepository.saveAll(logsEntities);
         } catch (Exception e) {
-            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+           e.printStackTrace();
         }
 
     }

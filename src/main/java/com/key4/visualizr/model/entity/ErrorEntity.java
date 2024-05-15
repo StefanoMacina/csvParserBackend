@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity @NoArgsConstructor @Data
-@Table(name = "logs")
+@Table(name = "errorlogs")
 public class ErrorEntity {
 
     @Id

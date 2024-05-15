@@ -17,7 +17,7 @@ public class LogsController {
     @Autowired
     LogsService logsService;
 
-    @GetMapping("/logs")
+    @GetMapping("/partlogs")
     public ResponseEntity<List<LogsEntity>> getAllLogs(){
         try {
             List<LogsEntity> logsList = logsService.fetchAllLogs();
@@ -32,10 +32,10 @@ public class LogsController {
 
     }
 
-    @PostMapping("/")
+    @PostMapping("/partslogupload")
     public void uploadLogs( ){
         try {
-
+            logsService.save();
         }catch (Exception e){
             throw new RuntimeException("fail to upload csv data");
         }

@@ -15,8 +15,8 @@ import org.apache.commons.csv.CSVRecord;
 
 public class CSVHelper {
 
-    public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
-    public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
+    public static final String LOGS_FILE_PATH = "/home/quark/Desktop/i4Parts_log.csv";
+    public static final String ERROR_FILE_PATH = "/home/quark/Desktop/i4Error_log.csv";
 
     public static List<LogsEntity> csvToLog() {
         try (
@@ -32,24 +32,7 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
                 LogsEntity logEntity = new LogsEntity(
-                        Integer.parseInt(csvRecord.get("Id")),
-                        Double.parseDouble(csvRecord.get("Bar_length")),
-                        Double.parseDouble(csvRecord.get("Length")),
-                        Boolean.parseBoolean(csvRecord.get("Is_a_rest_peace")),
-                        csvRecord.get("Job_code"),
-                        csvRecord.get("Article"),
-                        csvRecord.get("Barcode"),
-                        csvRecord.get("Profile_code"),
-                        csvRecord.get("Colour"),
-                        LocalDateTime.parse(csvRecord.get("Start_time")),
-                        LocalDateTime.parse(csvRecord.get("End_time")),
-                        Double.parseDouble(csvRecord.get("Total_span")),
-                        Double.parseDouble(csvRecord.get("Total_producing_span")),
-                        Double.parseDouble(csvRecord.get("Overfeed")),
-                        csvRecord.get("Operator"),
-                        Boolean.parseBoolean(csvRecord.get("Completed")),
-                        Boolean.parseBoolean(csvRecord.get("Redone")),
-                        csvRecord.get("Redone_reasone")
+
                 );
 
                 logsEntities.add(logEntity);
@@ -57,7 +40,7 @@ public class CSVHelper {
 
             return logsEntities;
         } catch (IOException e){
-            throw new RuntimeException("error parsing logs");
+            throw new RuntimeException("error parsing partslog");
         }
     }
 
@@ -88,7 +71,7 @@ public class CSVHelper {
             return errorEntities;
 
         } catch (IOException e){
-            throw new RuntimeException("error parsing errors");
+            throw new RuntimeException("error parsing record");
         }
     }
 }
