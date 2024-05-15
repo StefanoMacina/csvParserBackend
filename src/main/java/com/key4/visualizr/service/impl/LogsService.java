@@ -24,12 +24,12 @@ public class LogsService implements ILogsService {
     @Override
     public void save(MultipartFile file){
 
-        try {
-            List<LogsEntity> logsEntities = CSVHelper.csvTo(file.getInputStream());
-            logsRepository.saveAll(logsEntities);
-        } catch (Exception e) {
-            throw new RuntimeException("fail to store csv data: " + e.getMessage());
-        }
+//        try {
+//            List<LogsEntity> logsEntities = CSVHelper.csvToLog(file.getInputStream());
+//            logsRepository.saveAll(logsEntities);
+//        } catch (Exception e) {
+//            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+//        }
 
     }
 

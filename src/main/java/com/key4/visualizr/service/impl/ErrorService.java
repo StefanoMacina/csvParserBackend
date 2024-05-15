@@ -23,11 +23,11 @@ public class ErrorService implements IErrorService {
 
     @Override
     public void save(MultipartFile file) {
-        try {
-           List<ErrorEntity> errorEntities = CSVHelper.csvToTutorials(file.getInputStream());
-           errorRepository.saveAll(errorEntities);
-        } catch (Exception e) {
-            throw new RuntimeException("fail to store csv data: " + e.getMessage());
-        }
+//        try {
+//           List<ErrorEntity> errorEntities = CSVHelper.csvToError(file.getInputStream());
+//           errorRepository.saveAll(errorEntities);
+//        } catch (Exception e) {
+//            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+//        }
     }
 }
