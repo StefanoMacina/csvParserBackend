@@ -16,8 +16,8 @@ public class PartlogsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "Log_index")
-    private int log_index;
+    @Column(name = "Log index")
+    private int logIndex;
 
     @Column(name = "Bar length")
     private double bar_length;
@@ -26,10 +26,10 @@ public class PartlogsEntity {
     private double length;
 
     @Column(name = "Is a rest piece")
-    private boolean is_a_rest_piece;
+    private boolean restPiece;
 
     @Column(name = "Job Code")
-    private String job_Code;
+    private String jobCode;
 
     @Column(name = "Article")
     private String article;
@@ -39,7 +39,7 @@ public class PartlogsEntity {
     private String barcode;
 
     @Column(name = "Profile code")
-    private String profile_code;
+    private String profileCode;
 
     @Column(name = "Colour")
     @Nullable
@@ -47,19 +47,19 @@ public class PartlogsEntity {
 
     @Column(name = "Start time")
     @Nullable
-    private String start_time;
+    private String startTime;
 
     @Column(name = "End time")
     @Nullable
-    private String end_time;
+    private String endTime;
 
     @Column(name = "Total span")
     @Nullable
-    private String total_span;
+    private String totalSpan;
 
     @Column(name = "Total producing span")
     @Nullable
-    private String total_producing_span;
+    private String totalProducingSpan;
 
     @Column(name = "Overfeed")
     @Nullable
@@ -76,69 +76,63 @@ public class PartlogsEntity {
 
     @Column(name = "Redone reason")
     @Nullable
-    private String redone_reason;
+    private String redoneReason;
 
     @Column(name = "Arming start time")
     @Nullable
-    private String arming_start_time;
+    private String armingStartTime;
 
     @Column(name = "Arming end time")
     @Nullable
-    private String arming_end_time;
+    private String armingEndTime;
 
     @Column(name = "Arming duration")
     @Nullable
-    private String arming_duration;
+    private String armingDuration;
 
     @Column(name = "Working start time")
     @Nullable
-    private String working_start_time;
+    private String workingStartTime;
 
     @Column(name = "Working end time")
     @Nullable
-    private String working_end_time;
+    private String workingEndTime;
 
     @Column(name = "Working duration")
     @Nullable
-    private String working_duration;
+    private String workingDuration;
 
 
-    public PartlogsEntity(int log_index, double bar_length, double length,
-                          boolean is_a_rest_piece, String job_Code,
-                          String article, String barcode,
-                          String profile_code, String colour,
-                          String start_time, String end_time,
-                          String total_span, String total_producing_span,
-                          String overfeed, String operator, boolean completed,
-                          boolean redone, String redone_reason,
-                          String arming_start_time, String arming_end_time,
-                          String arming_duration, String working_start_time,
-                          String working_end_time, String working_duration
-    ) {
-        this.log_index = log_index;
+    public PartlogsEntity(int logIndex, double bar_length, double length, boolean restPiece, String jobCode, String article,
+                          @Nullable String barcode, String profileCode, @Nullable String colour, @Nullable String startTime,
+                          @Nullable String endTime, @Nullable String totalSpan, @Nullable String totalProducingSpan,
+                          @Nullable String overfeed, String operator, boolean completed, boolean redone, @Nullable String redoneReason,
+                          @Nullable String armingStartTime, @Nullable String armingEndTime, @Nullable String armingDuration,
+                          @Nullable String workingStartTime, @Nullable String workingEndTime, @Nullable String workingDuration) {
+        this.logIndex = logIndex;
         this.bar_length = bar_length;
         this.length = length;
-        this.is_a_rest_piece = is_a_rest_piece;
-        this.job_Code = job_Code;
+        this.restPiece = restPiece;
+        this.jobCode = jobCode;
         this.article = article;
         this.barcode = barcode;
-        this.profile_code = profile_code;
+        this.profileCode = profileCode;
         this.colour = colour;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.total_span = total_span;
-        this.total_producing_span = total_producing_span;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.totalSpan = totalSpan;
+        this.totalProducingSpan = totalProducingSpan;
         this.overfeed = overfeed;
         this.operator = operator;
         this.completed = completed;
         this.redone = redone;
-        this.redone_reason = redone_reason;
-        this.arming_start_time = arming_start_time;
-        this.arming_end_time = arming_end_time;
-        this.arming_duration = arming_duration;
-        this.working_start_time = working_start_time;
-        this.working_end_time = working_end_time;
-        this.working_duration = working_duration;
+        this.redoneReason = redoneReason;
+        this.armingStartTime = armingStartTime;
+        this.armingEndTime = armingEndTime;
+        this.armingDuration = armingDuration;
+        this.workingStartTime = workingStartTime;
+        this.workingEndTime = workingEndTime;
+        this.workingDuration = workingDuration;
     }
 }
 

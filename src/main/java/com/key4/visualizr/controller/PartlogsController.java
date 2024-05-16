@@ -32,15 +32,18 @@ public class PartlogsController {
     @GetMapping("/pagpartlogs")
     public ResponseEntity<Page<PartlogsEntity>> getAllPaginated(
         @RequestParam int page,
-        @RequestParam int size
+        @RequestParam int size,
+        @RequestParam String sortDirection,
+        @RequestParam String sortBy
     ) {
         try{
-            Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size);
+            Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, sortDirection, sortBy);
             if(paginatedDatas.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
