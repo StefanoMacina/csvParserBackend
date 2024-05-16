@@ -1,7 +1,7 @@
 package com.key4.visualizr.service.impl;
 
 import com.key4.visualizr.helper.CSVHelper;
-import com.key4.visualizr.model.entity.LogsEntity;
+import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.repository.LogsRepository;
 import com.key4.visualizr.service.ILogsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class LogsService implements ILogsService {
     LogsRepository logsRepository;
 
     @Override
-    public List<LogsEntity> fetchAllLogs() {
+    public List<PartlogsEntity> fetchAllLogs() {
         return logsRepository.findAll();
     }
 
@@ -24,7 +24,7 @@ public class LogsService implements ILogsService {
     public void save(){
 
         try {
-            List<LogsEntity> logsEntities = CSVHelper.csvToLog();
+            List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
             logsRepository.saveAll(logsEntities);
         } catch (Exception e) {
             e.printStackTrace();

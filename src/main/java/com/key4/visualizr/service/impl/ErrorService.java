@@ -23,7 +23,7 @@ public class ErrorService implements IErrorService {
     @Override
     public void save() {
         try {
-           List<ErrorEntity> errorEntities = CSVHelper.csvToError();
+           List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
            errorRepository.saveAll(errorEntities);
         } catch (Exception e) {
             e.printStackTrace();

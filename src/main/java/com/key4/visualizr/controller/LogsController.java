@@ -1,6 +1,6 @@
 package com.key4.visualizr.controller;
 
-import com.key4.visualizr.model.entity.LogsEntity;
+import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.service.impl.LogsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class LogsController {
     LogsService logsService;
 
     @GetMapping("/partlogs")
-    public ResponseEntity<List<LogsEntity>> getAllLogs(){
+    public ResponseEntity<List<PartlogsEntity>> getAllLogs(){
         try {
-            List<LogsEntity> logsList = logsService.fetchAllLogs();
+            List<PartlogsEntity> logsList = logsService.fetchAllLogs();
 
             if(logsList.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);

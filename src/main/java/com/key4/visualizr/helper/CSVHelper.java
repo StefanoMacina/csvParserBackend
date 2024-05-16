@@ -1,7 +1,7 @@
 package com.key4.visualizr.helper;
 
 import com.key4.visualizr.model.entity.ErrorEntity;
-import com.key4.visualizr.model.entity.LogsEntity;
+import com.key4.visualizr.model.entity.PartlogsEntity;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,8 +10,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -23,18 +21,19 @@ public class CSVHelper {
     final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
     final static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    public static List<LogsEntity> csvToLog() {
+    public static List<PartlogsEntity> csvToPartlog() {
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(LOGS_FILE_PATH));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                        .withIgnoreSurroundingSpaces()
-                        .withNullString("")
-                        .withDelimiter(';')
                         .withFirstRecordAsHeader()
-                        .withIgnoreHeaderCase())
+                        .withIgnoreHeaderCase()
+                        .withDelimiter(';')
+                        .withIgnoreEmptyLines()
+                        .withAllowMissingColumnNames()
+                        .withTrim());
                 )
         {
-            List<LogsEntity> logsEntities = new ArrayList<>();
+            List<PartlogsEntity> logsEntities = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
@@ -47,47 +46,47 @@ public class CSVHelper {
                         String barcode = csvRecord.get("Barcode");
                         String profileCode = csvRecord.get("Profile code");
                         String colour = csvRecord.get("Colour");
-                        LocalDateTime startTime = LocalDateTime.parse(csvRecord.get("Start time"),formatter);
-                        LocalDateTime endTime = LocalDateTime.parse(csvRecord.get("End time"), formatter);
-                        double totalSpan = Double.parseDouble(csvRecord.get("Total span"));
-                        double totalProducingSpan = Double.parseDouble(csvRecord.get("Total producing span"));
-                        double overfeed = Double.parseDouble(csvRecord.get("Overfeed"));
+                        String startTime = csvRecord.get("Start time");
+                        String endTime = csvRecord.get("End time");
+                        String totalSpan = csvRecord.get("Total span");
+                        String totalProducingSpan = csvRecord.get("Total producing span");
+                        String overfeed = csvRecord.get("Overfeed");
                         String operator = csvRecord.get("Operator");
                         boolean completed = Boolean.parseBoolean(csvRecord.get("Completed"));
                         boolean redone = Boolean.parseBoolean(csvRecord.get("Redone"));
                         String redoneReason = csvRecord.get("Redone reason");
-                        LocalDateTime arming_start = LocalDateTime.parse(csvRecord.get("Arming start time"), formatter);
-                        LocalDateTime arming_end = LocalDateTime.parse(csvRecord.get("Arming end time"), formatter);
-                        LocalTime arming_duration = LocalTime.parse(csvRecord.get("Arming duration"), timeFormatter);
-                        LocalDateTime working_start = LocalDateTime.parse(csvRecord.get("Working start time"), formatter);
-                        LocalDateTime working_end = LocalDateTime.parse(csvRecord.get("Working end time"), formatter);
-                        LocalTime working_duration = LocalTime.parse(csvRecord.get("Working duration"), timeFormatter);
+                        String arming_start = csvRecord.get("Arming start time");
+                        String arming_end = csvRecord.get("Arming end time");
+                        String arming_duration = csvRecord.get("Arming duration");
+                        String working_start = csvRecord.get("Working start time");
+                        String working_end = csvRecord.get("Working end time");
+                        String working_duration =csvRecord.get("Working duration");
 
-                    LogsEntity logEntity = new LogsEntity(
-                    log_index,
-                    bar_length,
-                    length,
-                    restPiece,
-                    jobCode,
-                    article,
-                    barcode,
-                    profileCode,
-                    colour,
-                    startTime,
-                    endTime,
-                    totalSpan,
-                    totalProducingSpan,
-                    overfeed,
-                    operator,
-                    completed,
-                    redone,
-                    redoneReason,
-                    arming_start,
-                    arming_end,
-                    arming_duration,
-                    working_start,
-                    working_end,
-                    working_duration
+                    PartlogsEntity logEntity = new PartlogsEntity(
+                        log_index,
+                        bar_length,
+                        length,
+                        restPiece,
+                        jobCode,
+                        article,
+                        barcode,
+                        profileCode,
+                        colour,
+                        startTime.isBlank() ? "" : startTime,
+                        endTime.isBlank() ? "" : endTime,
+                        totalSpan.isBlank() ? "" : totalSpan,
+                        totalProducingSpan.isBlank() ? "" : totalProducingSpan,
+                        overfeed.isBlank() ? "" : overfeed,
+                        operator,
+                        completed,
+                        redone,
+                        redoneReason,
+                        arming_start.isBlank() ? "" : arming_start,
+                        arming_end.isBlank() ? "" : arming_end,
+                        arming_duration.isBlank() ? "" : arming_duration,
+                        working_start.isBlank() ? "" : working_start,
+                        working_end.isBlank() ? "" : working_end,
+                        working_duration.isBlank() ? "" : working_duration
                 );
                 logsEntities.add(logEntity);
             }
@@ -100,12 +99,11 @@ public class CSVHelper {
 
     }
 
-    public static List<ErrorEntity> csvToError() {
+    public static List<ErrorEntity> csvToErrorlog() {
 
 
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(ERROR_FILE_PATH));
-
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()

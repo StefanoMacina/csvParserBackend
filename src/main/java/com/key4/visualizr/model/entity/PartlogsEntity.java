@@ -1,70 +1,120 @@
 package com.key4.visualizr.model.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity @NoArgsConstructor @Data
 @Table(name = "partslogs")
-public class LogsEntity {
+public class PartlogsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "Log_index")
     private int log_index;
+
     @Column(name = "Bar length")
     private double bar_length;
+
     @Column(name = "Length")
     private double length;
+
     @Column(name = "Is a rest piece")
     private boolean is_a_rest_piece;
+
     @Column(name = "Job Code")
     private String job_Code;
+
     @Column(name = "Article")
     private String article;
+
     @Column(name = "Barcode")
+    @Nullable
     private String barcode;
+
     @Column(name = "Profile code")
     private String profile_code;
+
     @Column(name = "Colour")
+    @Nullable
     private String colour;
+
     @Column(name = "Start time")
-    private LocalDateTime start_time;
+    @Nullable
+    private String start_time;
+
     @Column(name = "End time")
-    private LocalDateTime end_time;
+    @Nullable
+    private String end_time;
+
     @Column(name = "Total span")
-    private double total_span;
+    @Nullable
+    private String total_span;
+
     @Column(name = "Total producing span")
-    private double total_producing_span;
+    @Nullable
+    private String total_producing_span;
+
     @Column(name = "Overfeed")
-    private double overfeed;
+    @Nullable
+    private String overfeed;
+
     @Column(name = "Operator")
     private String operator;
+
     @Column(name = "Completed")
     private boolean completed;
+
     @Column(name = "Redone")
     private boolean redone;
+
     @Column(name = "Redone reason")
+    @Nullable
     private String redone_reason;
+
     @Column(name = "Arming start time")
-    private LocalDateTime arming_start_time;
+    @Nullable
+    private String arming_start_time;
+
     @Column(name = "Arming end time")
-    private LocalDateTime arming_end_time;
+    @Nullable
+    private String arming_end_time;
+
     @Column(name = "Arming duration")
-    private LocalTime arming_duration;
+    @Nullable
+    private String arming_duration;
+
     @Column(name = "Working start time")
-    private LocalDateTime working_start_time;
+    @Nullable
+    private String working_start_time;
+
     @Column(name = "Working end time")
-    private LocalDateTime working_end_time;
+    @Nullable
+    private String working_end_time;
+
     @Column(name = "Working duration")
-    private LocalTime working_duration;
+    @Nullable
+    private String working_duration;
 
 
-    public LogsEntity(int log_index, double bar_length, double length, boolean is_a_rest_piece, String job_Code, String article, String barcode, String profile_code, String colour, LocalDateTime start_time, LocalDateTime end_time, double total_span, double total_producing_span, double overfeed, String operator, boolean completed, boolean redone, String redone_reason, LocalDateTime arming_start_time, LocalDateTime arming_end_time, LocalTime arming_duration, LocalDateTime working_start_time, LocalDateTime working_end_time, LocalTime working_duration) {
+    public PartlogsEntity(int log_index, double bar_length, double length,
+                          boolean is_a_rest_piece, String job_Code,
+                          String article, String barcode,
+                          String profile_code, String colour,
+                          String start_time, String end_time,
+                          String total_span, String total_producing_span,
+                          String overfeed, String operator, boolean completed,
+                          boolean redone, String redone_reason,
+                          String arming_start_time, String arming_end_time,
+                          String arming_duration, String working_start_time,
+                          String working_end_time, String working_duration
+    ) {
         this.log_index = log_index;
         this.bar_length = bar_length;
         this.length = length;
