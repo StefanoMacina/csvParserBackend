@@ -2,6 +2,7 @@ package com.key4.visualizr.controller;
 
 import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.service.impl.ErrorService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -33,11 +34,21 @@ public class ErrorController {
     }
 
     @GetMapping("/pagerrlogs")
-    public Page<ErrorEntity> getAllPaginated(
+    public ResponseEntity<Page<ErrorEntity>> getAllPaginated(
             @RequestParam int page,
             @RequestParam int size
     ){
-        return errorService.getAllPaginated(page,size);
+        try{
+
+            Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size);
+            if(paginatedDatas.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(paginatedDatas,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @PostMapping("/errorsUpload")

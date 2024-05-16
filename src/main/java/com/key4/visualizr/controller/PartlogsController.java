@@ -1,5 +1,4 @@
 package com.key4.visualizr.controller;
-
 import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.service.impl.PartlogsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +30,19 @@ public class PartlogsController {
     }
 
     @GetMapping("/pagpartlogs")
-    public Page<PartlogsEntity> getAllPaginated(
+    public ResponseEntity<Page<PartlogsEntity>> getAllPaginated(
         @RequestParam int page,
         @RequestParam int size
     ) {
-        return ps.getAllPaginated(page,size);
+        try{
+            Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size);
+            if(paginatedDatas.isEmpty()){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
