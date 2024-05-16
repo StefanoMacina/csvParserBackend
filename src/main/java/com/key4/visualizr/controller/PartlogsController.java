@@ -3,6 +3,7 @@ package com.key4.visualizr.controller;
 import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.service.impl.LogsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-public class LogsController {
+public class PartlogsController {
 
     @Autowired
     LogsService logsService;
@@ -27,8 +28,16 @@ public class LogsController {
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
+    @GetMapping("/pagpartlogs")
+    public Page<PartlogsEntity> getAllPaginated(
+        @RequestParam int page,
+        @RequestParam int size
+    ) {
+        return logsService.fetchAllPaginated(page,size);
+    }
+
 
     @PostMapping("/partslogupload")
     public void uploadLogs( ){
