@@ -1,7 +1,7 @@
 package com.key4.visualizr.controller;
 
 import com.key4.visualizr.model.entity.PartlogsEntity;
-import com.key4.visualizr.service.impl.LogsService;
+import com.key4.visualizr.service.impl.PartlogsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,12 +14,12 @@ import java.util.List;
 public class PartlogsController {
 
     @Autowired
-    LogsService logsService;
+    PartlogsService ps;
 
     @GetMapping("/partlogs")
     public ResponseEntity<List<PartlogsEntity>> getAllLogs(){
         try {
-            List<PartlogsEntity> logsList = logsService.getAllLogs();
+            List<PartlogsEntity> logsList = ps.getAllLogs();
 
             if(logsList.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -35,14 +35,14 @@ public class PartlogsController {
         @RequestParam int page,
         @RequestParam int size
     ) {
-        return logsService.getAllPaginated(page,size);
+        return ps.getAllPaginated(page,size);
     }
 
 
     @PostMapping("/partslogupload")
     public void uploadLogs( ){
         try {
-            logsService.save();
+            ps.save();
         }catch (Exception e){
             throw new RuntimeException("fail to upload csv data");
         }

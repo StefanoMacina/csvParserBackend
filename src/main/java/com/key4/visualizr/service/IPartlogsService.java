@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface ILogsService {
+public interface IPartlogsService {
 
     List<PartlogsEntity> getAllLogs();
 
