@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin
 public class ErrorController {
 
     @Autowired
@@ -34,8 +35,8 @@ public class ErrorController {
     public void uploadFile() {
         try {
             errorService.save();
-        }catch (Exception ignored){
-
+        }catch (Exception e){
+            throw new RuntimeException("fail to upload csv data");
         }
     }
 

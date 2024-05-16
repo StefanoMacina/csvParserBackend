@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -18,8 +18,8 @@ import org.apache.commons.csv.CSVRecord;
 
 public class CSVHelper {
 
-    public static final String LOGS_FILE_PATH = "/home/quark/Desktop/i4Parts_log.csv";
-    public static final String ERROR_FILE_PATH = "/home/quark/Desktop/i4Error_log.csv";
+    public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
+    public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
     final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
     final static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -32,8 +32,7 @@ public class CSVHelper {
                         .withDelimiter(';')
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase())
-
-        )
+                )
         {
             List<LogsEntity> logsEntities = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
@@ -102,11 +101,17 @@ public class CSVHelper {
     }
 
     public static List<ErrorEntity> csvToError() {
+
+
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(ERROR_FILE_PATH));
+
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()
+                        .withDelimiter(';')
+                        .withIgnoreEmptyLines()
+                        .withAllowMissingColumnNames()
                         .withTrim());
         )
         {
@@ -114,21 +119,42 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+
+                String code = csvRecord.get("Code");
+                String description = csvRecord.get("Description");
+                String duration = csvRecord.get("Duration (hh:mm:Ss)");
+                String occurences = csvRecord.get("Occurences");
+                String state = csvRecord.get("State");
+                String date = csvRecord.get("Date");
+                String emptyColumnAlarm = csvRecord.get("");
+
+
                 ErrorEntity errorEntity = new ErrorEntity(
-                       Integer.parseInt(csvRecord.get("Code")),
-                        csvRecord.get("Description"),
-                        LocalTime.parse(csvRecord.get("Duration")),
-                        Integer.parseInt(csvRecord.get("Occurrences")),
-                        csvRecord.get("State"),
-                        LocalDateTime.parse(csvRecord.get("date"))
-                );
+                        isNumeric(code) ? code : "-1",
+                        isNumeric(code) ? description : code,
+                        isNumeric(code) ? duration : description,
+                        isNumeric(code) ? occurences : duration,
+                        isNumeric(code) ? state : occurences,
+                        isNumeric(code) ? date : state,
+                        isNumeric(code) ? emptyColumnAlarm : ""
+                 );
 
                 errorEntities.add(errorEntity);
             }
             return errorEntities;
-
         } catch (IOException e){
+            e.printStackTrace();
             throw new RuntimeException("error parsing record");
+        }
+    }
+
+    public static boolean isNumeric(String num)
+    {
+        try{
+            int n = Integer.parseInt(num);
+            return true;
+        }catch (NumberFormatException e){
+            return false;
         }
     }
 }

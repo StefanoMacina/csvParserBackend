@@ -1,6 +1,5 @@
 package com.key4.visualizr.model.entity;
 
-import ch.qos.logback.core.joran.spi.NoAutoStart;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

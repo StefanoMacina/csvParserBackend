@@ -1,11 +1,11 @@
 package com.key4.visualizr.model.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity @NoArgsConstructor @Data
 @Table(name = "errorlogs")
@@ -14,19 +14,41 @@ public class ErrorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int code;
-    private String description;
-    private LocalTime duration;
-    private int occurences;
-    private String state;
-    private LocalDateTime date;
 
-    public ErrorEntity(int code, String description, LocalTime duration, int occurences, String state, LocalDateTime date) {
+    @Column(name = "Code")
+    private String code;
+
+    @Column(name = "Description",length = 500)
+    private String description;
+
+    @Column(name = "Duration (hh:mm:Ss)")
+    @Nullable
+    private String duration;
+    
+    @Column(name = "Occurrences")
+    @Nullable
+    private String occurences;
+
+    @Column(name = "State")
+    private String state;
+
+    @Column(name = "Date")
+    private String date;
+
+    @Column(name = "txt")
+    private String txt;
+
+    public ErrorEntity(String code, String description,
+                       String duration, String occurences,
+                       String state, String date,
+                       String txt) {
         this.code = code;
         this.description = description;
         this.duration = duration;
         this.occurences = occurences;
         this.state = state;
         this.date = date;
+        this.txt = txt;
     }
+
 }
