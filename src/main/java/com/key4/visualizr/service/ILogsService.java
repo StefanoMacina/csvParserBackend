@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ILogsService {
 
-    List<PartlogsEntity> fetchAllLogs();
+    List<PartlogsEntity> getAllLogs();
 
-    Page<PartlogsEntity> fetchAllPaginated(int page,int size);
+    Page<PartlogsEntity> getAllPaginated(int page,int size);
 
     void save();
 

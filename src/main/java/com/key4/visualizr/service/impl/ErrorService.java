@@ -19,12 +19,12 @@ public class ErrorService implements IErrorService {
     ErrorRepository errorRepository;
 
     @Override
-    public List<ErrorEntity> fetchAllErrors() {
+    public List<ErrorEntity> getAllErrors() {
         return errorRepository.findAll();
     }
 
     @Override
-    public Page<ErrorEntity> fetchAllPaginated(int page, int size) {
+    public Page<ErrorEntity> getAllPaginated(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         return errorRepository.findAll(pageRequest);

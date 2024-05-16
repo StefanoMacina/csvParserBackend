@@ -18,12 +18,12 @@ public class LogsService implements ILogsService {
     LogsRepository logsRepository;
 
     @Override
-    public List<PartlogsEntity> fetchAllLogs() {
+    public List<PartlogsEntity> getAllLogs() {
         return logsRepository.findAll();
     }
 
     @Override
-    public Page<PartlogsEntity> fetchAllPaginated(int page, int size) {
+    public Page<PartlogsEntity> getAllPaginated(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page,size);
         return logsRepository.findAll(pageRequest);
     }

@@ -19,7 +19,7 @@ public class PartlogsController {
     @GetMapping("/partlogs")
     public ResponseEntity<List<PartlogsEntity>> getAllLogs(){
         try {
-            List<PartlogsEntity> logsList = logsService.fetchAllLogs();
+            List<PartlogsEntity> logsList = logsService.getAllLogs();
 
             if(logsList.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -35,7 +35,7 @@ public class PartlogsController {
         @RequestParam int page,
         @RequestParam int size
     ) {
-        return logsService.fetchAllPaginated(page,size);
+        return logsService.getAllPaginated(page,size);
     }
 
 

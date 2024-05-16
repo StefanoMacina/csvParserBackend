@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface IErrorService {
 
-    List<ErrorEntity> fetchAllErrors();
+    List<ErrorEntity> getAllErrors();
 
-    Page<ErrorEntity> fetchAllPaginated(int page, int size);
+    Page<ErrorEntity> getAllPaginated(int page, int size);
 
     void save();
 

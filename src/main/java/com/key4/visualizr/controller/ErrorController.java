@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -23,7 +21,7 @@ public class ErrorController {
     public ResponseEntity<List<ErrorEntity>> getAllErrors(
     ){
         try{
-            List<ErrorEntity> errorsList = errorService.fetchAllErrors();
+            List<ErrorEntity> errorsList = errorService.getAllErrors();
 
             if(errorsList.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -39,7 +37,7 @@ public class ErrorController {
             @RequestParam int page,
             @RequestParam int size
     ){
-        return errorService.fetchAllPaginated(page,size);
+        return errorService.getAllPaginated(page,size);
     }
 
     @PostMapping("/errorsUpload")
