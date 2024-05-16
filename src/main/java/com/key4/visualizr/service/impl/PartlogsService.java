@@ -24,8 +24,14 @@ public class PartlogsService implements IPartlogsService {
     }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginated(int page, int size, String direction, String by) {
+    public Page<PartlogsEntity> getAllPaginatedAndSorted(int page, int size, String direction, String by) {
         PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(direction),by));
+        return pl.findAll(pageRequest);
+    }
+
+    @Override
+    public Page<PartlogsEntity> getAllPaginated(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.DESC,"endTime"));
         return pl.findAll(pageRequest);
     }
 
