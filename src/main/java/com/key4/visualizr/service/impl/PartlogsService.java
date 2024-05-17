@@ -35,8 +35,12 @@ public class PartlogsService implements IPartlogsService {
     }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginated(int page, int size, String direction) {
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(direction),"id"));
+    public Page<PartlogsEntity> getAllPaginated(int page, int size, int directionNumber, String... orderBy) {
+
+        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
+                directionNumber != -1 ? "asc" : "desc"
+        ),orderBy));
+
         return pl.findAll(pageRequest);
     }
 

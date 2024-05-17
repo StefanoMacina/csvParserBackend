@@ -9,7 +9,7 @@ public interface IPartlogsService {
 
     List<PartlogsEntity> getAllLogs();
 
-    Page<PartlogsEntity> getAllPaginated(int page,int size, String direction);
+    Page<PartlogsEntity> getAllPaginated(int page,int size, int direction, String... orderby);
 
     void save();
 

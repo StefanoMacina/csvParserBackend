@@ -38,12 +38,16 @@ public class ErrorController {
     public ResponseEntity<Page<ErrorEntity>> getAllPaginated(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
+            @RequestParam(value = "orderBy",
+                required = false,
+            defaultValue = "id") String orderBy,
             @RequestParam(name = "dir",
                     required = false,
-                    defaultValue = "desc") String direction
+                    defaultValue = "-1") int direction
+
     ){
         try{
-            Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size, direction);
+            Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size, direction, orderBy);
             if(paginatedDatas.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

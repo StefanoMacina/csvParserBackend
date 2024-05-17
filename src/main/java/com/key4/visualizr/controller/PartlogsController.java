@@ -34,13 +34,17 @@ public class PartlogsController {
     public ResponseEntity<Page<PartlogsEntity>> getAllPaginated(
             @RequestParam(name = "page") int page,
             @RequestParam(name = "size") int size,
+            @RequestParam(name = "orderBy",
+                    required = false,
+                    defaultValue = "id") String orderBy,
             @RequestParam(name = "dir",
                     required = false,
-                    defaultValue = "desc"
-            ) String direction
+                    defaultValue = "-1"
+            ) int direction
+
     ) {
         try{
-            Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction);
+            Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction, orderBy);
             if(paginatedDatas.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
