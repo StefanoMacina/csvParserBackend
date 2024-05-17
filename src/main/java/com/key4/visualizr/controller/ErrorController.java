@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -33,27 +34,44 @@ public class ErrorController {
 
     @GetMapping("/pagerrlogs")
     public ResponseEntity<Page<ErrorEntity>> getAllPaginated(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam(value = "orderBy",
-                required = false,
-            defaultValue = "id") String orderBy,
-            @RequestParam(name = "dir",
+            @RequestParam(
+                    name="page",
+                    required = false) int page,
+            @RequestParam(name="size",
+                    required = false) int size,
+            @RequestParam(
+                    value = "orderBy",
                     required = false,
-                    defaultValue = "-1") int direction
-
-    ){
-        try{
-            Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size, direction, orderBy);
-
-            if(paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-            return new ResponseEntity<>(paginatedDatas,HttpStatus.OK);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+                    defaultValue = "id") String orderBy,
+            @RequestParam(
+                    name = "dir",
+                    required = false,
+                    defaultValue = "-1") int direction,
+            @RequestParam(
+                    name = "globalfilter",
+            required = false
+            )String keyword
+    ) {
+        if (keyword != null) {
+            try {
+                Page<ErrorEntity> paginatedSearchData = errorService.fullTextResearch(page,size,keyword,direction,orderBy);
+                return new ResponseEntity<>(paginatedSearchData, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            try {
+                Page<ErrorEntity> paginatedDatas = errorService.getAllPaginated(page, size, direction, orderBy);
+                if (paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
+
 
     @PostMapping("/errorsUpload")
     public ResponseEntity<String> uploadFile() {

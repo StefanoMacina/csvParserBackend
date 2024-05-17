@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ErrorService implements IErrorService {
@@ -23,12 +24,24 @@ public class ErrorService implements IErrorService {
     }
 
     @Override
-    public Page<ErrorEntity> getAllPaginated(int page, int size, int directionNumber, String... orderBy) {
+    public Page<ErrorEntity> getAllPaginated(int page, int size,
+                                             int directionNumber, String... orderBy) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(
                 directionNumber != -1 ? "asc" : "desc"
         ),orderBy));
 
         return errorRepository.findAll(pageRequest);
+    }
+
+
+    @Override
+    public Page<ErrorEntity> fullTextResearch(int page, int size, String keyword,
+                                              int directionNumber, String... orderBy) {
+        PageRequest pageRequest = PageRequest.of(page,size,Sort.Direction.fromString(
+                directionNumber != -1 ? "asc" : "desc"
+        ),orderBy);
+
+        return errorRepository.search(String.valueOf(keyword),pageRequest);
     }
 
     @Override

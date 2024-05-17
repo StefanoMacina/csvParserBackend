@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import java.time.LocalDateTime;
 
@@ -15,24 +16,24 @@ public class ErrorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Code")
+    @Column(name = "code")
     private String code;
 
-    @Column(name = "Description",length = 500)
+    @Column(name = "description",length = 500)
     private String description;
 
-    @Column(name = "Duration (hh:mm:Ss)")
+    @Column(name = "duration (hh:mm:Ss)")
     @Nullable
     private String duration;
-    
-    @Column(name = "Occurrences")
+
+    @Column(name = "occurrences")
     @Nullable
     private String occurences;
 
-    @Column(name = "State")
+    @Column(name = "state")
     private String state;
 
-    @Column(name = "Date")
+    @Column(name = "date")
     private String date;
 
     @Column(name = "txt")
