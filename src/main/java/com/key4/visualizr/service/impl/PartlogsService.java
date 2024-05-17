@@ -19,23 +19,6 @@ public class PartlogsService implements IPartlogsService {
     PartogsRepository pl;
 
     @Override
-    public List<PartlogsEntity> getAllLogs() {
-        return pl.findAll();
-    }
-
-    @Override
-    public Page<PartlogsEntity> getAllPaginatedAndSorted(int page, int size, String direction, String by) {
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(direction),by));
-        return pl.findAll(pageRequest);
-    }
-
-    @Override
-    public Page<PartlogsEntity> getAllPaginated(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.DESC,"endTime"));
-        return pl.findAll(pageRequest);
-    }
-
-    @Override
     public void save(){
         try {
             List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
@@ -45,4 +28,16 @@ public class PartlogsService implements IPartlogsService {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }
+
+    @Override
+    public List<PartlogsEntity> getAllLogs() {
+        return pl.findAll();
+    }
+
+    @Override
+    public Page<PartlogsEntity> getAllPaginated(int page, int size, String direction) {
+        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(direction),"id"));
+        return pl.findAll(pageRequest);
+    }
+
 }

@@ -10,7 +10,7 @@ public interface IErrorService {
 
     List<ErrorEntity> getAllErrors();
 
-    Page<ErrorEntity> getAllPaginated(int page, int size);
+    Page<ErrorEntity> getAllPaginated(int page, int size, String direction);
 
     void save();
 

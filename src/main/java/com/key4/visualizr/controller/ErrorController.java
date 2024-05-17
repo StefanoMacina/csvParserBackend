@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,17 +36,20 @@ public class ErrorController {
 
     @GetMapping("/pagerrlogs")
     public ResponseEntity<Page<ErrorEntity>> getAllPaginated(
-            @RequestParam int page,
-            @RequestParam int size
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam(name = "dir",
+                    required = false,
+                    defaultValue = "desc") String direction
     ){
         try{
-
-            Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size);
+            Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size, direction);
             if(paginatedDatas.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(paginatedDatas,HttpStatus.OK);
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

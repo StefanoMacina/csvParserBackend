@@ -7,6 +7,7 @@ import com.key4.visualizr.service.IErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
@@ -24,8 +25,8 @@ public class ErrorService implements IErrorService {
     }
 
     @Override
-    public Page<ErrorEntity> getAllPaginated(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+    public Page<ErrorEntity> getAllPaginated(int page, int size, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction),"id"));
 
         return errorRepository.findAll(pageRequest);
     }
