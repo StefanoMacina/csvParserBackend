@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -29,25 +30,23 @@ public class PartlogsController {
         }
     }
 
-
     @GetMapping("/pagpartlogs")
     public ResponseEntity<Page<PartlogsEntity>> getAllPaginated(
             @RequestParam(name = "page") int page,
             @RequestParam(name = "size") int size,
             @RequestParam(name = "orderBy",
                     required = false,
-                    defaultValue = "id") String orderBy,
+                defaultValue = "id") String orderBy,
             @RequestParam(name = "dir",
                     required = false,
                     defaultValue = "-1"
             ) int direction
-
     ) {
         try{
             Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction, orderBy);
-            if(paginatedDatas.isEmpty()){
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+
+            if(paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
             return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
@@ -55,14 +54,13 @@ public class PartlogsController {
         }
     }
 
-
-
     @PostMapping("/partslogupload")
-    public void uploadLogs( ){
+    public ResponseEntity<String> uploadLogs( ){
         try {
             ps.save();
+            return new ResponseEntity<>("upload success", HttpStatus.CREATED);
         }catch (Exception e){
-            throw new RuntimeException("fail to upload csv data");
+            return new ResponseEntity<>("upload failed",HttpStatus.CONFLICT);
         }
     }
 }

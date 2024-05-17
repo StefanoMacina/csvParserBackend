@@ -2,14 +2,12 @@ package com.key4.visualizr.controller;
 
 import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.service.impl.ErrorService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -25,9 +23,8 @@ public class ErrorController {
         try{
             List<ErrorEntity> errorsList = errorService.getAllErrors();
 
-            if(errorsList.isEmpty()){
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+            if(errorsList.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
             return new ResponseEntity<>(errorsList, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -48,23 +45,23 @@ public class ErrorController {
     ){
         try{
             Page<ErrorEntity> paginatedDatas= errorService.getAllPaginated(page, size, direction, orderBy);
-            if(paginatedDatas.isEmpty()){
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+
+            if(paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
             return new ResponseEntity<>(paginatedDatas,HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @PostMapping("/errorsUpload")
-    public void uploadFile() {
+    public ResponseEntity<String> uploadFile() {
         try {
             errorService.save();
+            return new ResponseEntity<>("upload success",HttpStatus.CREATED);
         }catch (Exception e){
-            throw new RuntimeException("fail to upload csv data");
+           return new ResponseEntity<>("upload fail",HttpStatus.CONFLICT);
         }
     }
 }
