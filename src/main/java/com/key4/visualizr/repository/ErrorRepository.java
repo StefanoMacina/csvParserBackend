@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ErrorRepository extends JpaRepository<ErrorEntity, Integer> {
 
-    @Query(value = "SELECT * FROM errorlogs e WHERE e.description LIKE %:keyword%",
+    @Query(value = "SELECT * FROM errorlogs e WHERE " +
+            "e.description LIKE %:keyword% " +
+            "OR e.code LIKE %:keyword% " +
+            "OR e.state LIKE %:keyword%",
             nativeQuery = true
     )
     Page<ErrorEntity> search(@Param("keyword") String keyword, Pageable pageable);
