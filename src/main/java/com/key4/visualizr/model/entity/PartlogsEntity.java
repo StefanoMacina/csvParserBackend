@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.awt.*;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity @NoArgsConstructor @Data
 @Table(name = "partslogs")
@@ -16,6 +13,7 @@ public class PartlogsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(name = "Log index")
     private int logIndex;
 
@@ -27,6 +25,7 @@ public class PartlogsEntity {
 
     @Column(name = "Is a rest piece")
     private boolean restPiece;
+
 
     @Column(name = "Job Code")
     private String jobCode;
