@@ -125,7 +125,6 @@ public class CSVHelper {
                 String state = csvRecord.get("State");
                 LocalDateTime date = LocalDateTime.parse(csvRecord.get("Date"),DATE_TIME_FORMATTER);
 
-
                 ErrorEntity errorEntity = new ErrorEntity(
                         code,
                         description,
