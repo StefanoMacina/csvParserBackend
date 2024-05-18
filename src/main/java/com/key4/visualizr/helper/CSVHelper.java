@@ -100,47 +100,54 @@ public class CSVHelper {
 
     }
 
-    public static List<ErrorEntity> csvToErrorlog() {
 
-        try (
-                Reader reader = Files.newBufferedReader(Paths.get(ERROR_FILE_PATHL));
-                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                        .withFirstRecordAsHeader()
-                        .withIgnoreHeaderCase()
-                        .withDelimiter(';')
-                        .withIgnoreEmptyLines()
-                        .withAllowMissingColumnNames()
-                        .withTrim());
-        )
+    public static void csvToErrorlog() {
+        try(Reader r = Files.newBufferedReader(Paths.get(ERROR_FILE_PATHL)))
         {
-            List<ErrorEntity> errorEntities = new ArrayList<>();
-            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+            CSVParser parser = new CSVParser(r,CSVFormat.DEFAULT
+                    .withFirstRecordAsHeader()
+                    .withDelimiter(';'));
 
-            for (CSVRecord csvRecord : csvRecords) {
+            ErrorEntity errorEntity = null;
+            List<ErrorEntity> errorList = new ArrayList<>();
 
-                Integer code = Integer.valueOf(csvRecord.get("Code"));
-                String description = csvRecord.get("Description");
-                String duration = csvRecord.get("Duration (hh:mm:Ss)");
-                Integer occurences = Integer.valueOf(csvRecord.get("Occurences"));
-                String state = csvRecord.get("State");
-                LocalDateTime date = LocalDateTime.parse(csvRecord.get("Date"),DATE_TIME_FORMATTER);
-
-                ErrorEntity errorEntity = new ErrorEntity(
-                        code,
-                        description,
-                        duration,
-                        occurences,
-                        state,
-                        date
-                 );
-
-                errorEntities.add(errorEntity);
+            for (CSVRecord record : parser) {
+                if (isNumeric(record.get(0))) {
+                    errorEntity = new ErrorEntity();
+                    errorEntity.setCode(Integer.parseInt(record.get(0)));
+                    errorEntity.setDescription(record.get(1));
+                    if (record.size() >= 6) {
+                        String duration = record.get(2).isEmpty() ? "" : record.get(2);
+                        errorEntity.setDuration(duration);
+                        errorEntity.setOccurences(Integer.parseInt(record.get(3)));
+                        errorEntity.setState(record.get(4));
+                        errorEntity.setDate(LocalDateTime.parse(record.get(5), DATE_TIME_FORMATTER));
+                    }
+                    errorList.add(errorEntity);
+                } else if (errorEntity != null) {
+                    errorEntity.setDescription(errorEntity.getDescription() + record.get(1));
+                    errorEntity.setDate(LocalDateTime.parse(record.get(4), DATE_TIME_FORMATTER));
+                    errorEntity.setState(record.get(3));
+                    errorEntity.setOccurences(Integer.valueOf(record.get(2)));
+                    errorEntity.setDuration(record.get(3));
+                }
             }
-            return errorEntities;
-        } catch (IOException e){
+
+            errorList.forEach(System.out::println);
+
+            if (errorEntity != null) {
+                errorList.add(errorEntity);
+            }
+
+
+
+            parser.close();
+        }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("error parsing record");
         }
+
+
+
     }
 
     public static boolean isNumeric(String num)
