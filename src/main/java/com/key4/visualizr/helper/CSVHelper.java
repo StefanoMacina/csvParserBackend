@@ -5,6 +5,7 @@ import com.key4.visualizr.model.entity.PartlogsEntity;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,14 @@ public class CSVHelper {
 
     public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
     public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
+    public static final String LOGS_FILE_PATHL = "/home/quark/Desktop/i4Parts_log.csv";
+    public static final String ERROR_FILE_PATHL = "/home/quark/Desktop/i4Error_log3.csv";
     final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
     final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public static List<PartlogsEntity> csvToPartlog() {
         try (
-                Reader reader = Files.newBufferedReader(Paths.get(LOGS_FILE_PATH));
+                Reader reader = Files.newBufferedReader(Paths.get(LOGS_FILE_PATHL));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()
@@ -100,7 +103,7 @@ public class CSVHelper {
     public static List<ErrorEntity> csvToErrorlog() {
 
         try (
-                Reader reader = Files.newBufferedReader(Paths.get(ERROR_FILE_PATH));
+                Reader reader = Files.newBufferedReader(Paths.get(ERROR_FILE_PATHL));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()
@@ -115,23 +118,21 @@ public class CSVHelper {
 
             for (CSVRecord csvRecord : csvRecords) {
 
-                String code = csvRecord.get("Code");
+                Integer code = Integer.valueOf(csvRecord.get("Code"));
                 String description = csvRecord.get("Description");
                 String duration = csvRecord.get("Duration (hh:mm:Ss)");
-                String occurences = csvRecord.get("Occurences");
+                Integer occurences = Integer.valueOf(csvRecord.get("Occurences"));
                 String state = csvRecord.get("State");
-                String date = csvRecord.get("Date");
-                String emptyColumnAlarm = csvRecord.get("");
+                LocalDateTime date = LocalDateTime.parse(csvRecord.get("Date"),DATE_TIME_FORMATTER);
 
 
                 ErrorEntity errorEntity = new ErrorEntity(
-                        isNumeric(code) ? code : "-1",
-                        isNumeric(code) ? description : code,
-                        isNumeric(code) ? duration : description,
-                        isNumeric(code) ? occurences : duration,
-                        isNumeric(code) ? state : occurences,
-                        isNumeric(code) ? date : state,
-                        isNumeric(code) ? emptyColumnAlarm : ""
+                        code,
+                        description,
+                        duration,
+                        occurences,
+                        state,
+                        date
                  );
 
                 errorEntities.add(errorEntity);

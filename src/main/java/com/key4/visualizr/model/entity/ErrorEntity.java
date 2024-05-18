@@ -17,7 +17,7 @@ public class ErrorEntity {
     private int id;
 
     @Column(name = "code")
-    private String code;
+    private Integer code;
 
     @Column(name = "description",length = 500)
     private String description;
@@ -28,28 +28,25 @@ public class ErrorEntity {
 
     @Column(name = "occurrences")
     @Nullable
-    private String occurences;
+    private Integer occurences;
 
     @Column(name = "state")
     private String state;
 
     @Column(name = "date")
-    private String date;
+    private LocalDateTime date;
 
-    @Column(name = "txt")
-    private String txt;
 
-    public ErrorEntity(String code, String description,
-                       String duration, String occurences,
-                       String state, String date,
-                       String txt) {
+    public ErrorEntity(Integer code, String description,
+                       String duration, Integer occurences,
+                       String state, LocalDateTime date
+                       ) {
         this.code = code;
         this.description = description;
         this.duration = duration;
         this.occurences = occurences;
         this.state = state;
         this.date = date;
-        this.txt = txt;
     }
 
 }
