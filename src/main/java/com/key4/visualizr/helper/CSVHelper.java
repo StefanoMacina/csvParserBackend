@@ -141,7 +141,7 @@ public class CSVHelper {
                                 LocalDateTime.parse(record.get(4), DATE_TIME_FORMATTER)
                         );
                         errorEntityList.add(errorEntity);
-                        tempError = null; // Reinizializza tempError
+                        tempError = null;
                     }
                 }
             }
