@@ -8,17 +8,19 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.validation.Errors;
 
 public class CSVHelper {
 
     public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
     public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
     public static final String LOGS_FILE_PATHL = "/home/quark/Desktop/i4Parts_log.csv";
-    public static final String ERROR_FILE_PATHL = "/home/quark/Desktop/i4Error_log3.csv";
+    public static final String ERROR_FILE_PATHL = "/home/quark/Desktop/i4Error_log.csv";
     final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
     final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -32,38 +34,38 @@ public class CSVHelper {
                         .withIgnoreEmptyLines()
                         .withAllowMissingColumnNames()
                         .withTrim());
-                )
+        )
         {
             List<PartlogsEntity> logsEntities = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
-                        int log_index = Integer.parseInt(csvRecord.get("Index"));
-                        double bar_length = Double.parseDouble(csvRecord.get("Bar length"));
-                        double length = Double.parseDouble(csvRecord.get("Length"));
-                        boolean restPiece = Boolean.parseBoolean(csvRecord.get("Is a rest piece"));
-                        String jobCode = csvRecord.get("Job Code");
-                        String article = csvRecord.get("Article");
-                        String barcode = csvRecord.get("Barcode");
-                        String profileCode = csvRecord.get("Profile code");
-                        String colour = csvRecord.get("Colour");
-                        String startTime = csvRecord.get("Start time");
-                        String endTime = csvRecord.get("End time");
-                        String totalSpan = csvRecord.get("Total span");
-                        String totalProducingSpan = csvRecord.get("Total producing span");
-                        String overfeed = csvRecord.get("Overfeed");
-                        String operator = csvRecord.get("Operator");
-                        boolean completed = Boolean.parseBoolean(csvRecord.get("Completed"));
-                        boolean redone = Boolean.parseBoolean(csvRecord.get("Redone"));
-                        String redoneReason = csvRecord.get("Redone reason");
-                        String arming_start = csvRecord.get("Arming start time");
-                        String arming_end = csvRecord.get("Arming end time");
-                        String arming_duration = csvRecord.get("Arming duration");
-                        String working_start = csvRecord.get("Working start time");
-                        String working_end = csvRecord.get("Working end time");
-                        String working_duration =csvRecord.get("Working duration");
+                int log_index = Integer.parseInt(csvRecord.get("Index"));
+                double bar_length = Double.parseDouble(csvRecord.get("Bar length"));
+                double length = Double.parseDouble(csvRecord.get("Length"));
+                boolean restPiece = Boolean.parseBoolean(csvRecord.get("Is a rest piece"));
+                String jobCode = csvRecord.get("Job Code");
+                String article = csvRecord.get("Article");
+                String barcode = csvRecord.get("Barcode");
+                String profileCode = csvRecord.get("Profile code");
+                String colour = csvRecord.get("Colour");
+                String startTime = csvRecord.get("Start time");
+                String endTime = csvRecord.get("End time");
+                String totalSpan = csvRecord.get("Total span");
+                String totalProducingSpan = csvRecord.get("Total producing span");
+                String overfeed = csvRecord.get("Overfeed");
+                String operator = csvRecord.get("Operator");
+                boolean completed = Boolean.parseBoolean(csvRecord.get("Completed"));
+                boolean redone = Boolean.parseBoolean(csvRecord.get("Redone"));
+                String redoneReason = csvRecord.get("Redone reason");
+                String arming_start = csvRecord.get("Arming start time");
+                String arming_end = csvRecord.get("Arming end time");
+                String arming_duration = csvRecord.get("Arming duration");
+                String working_start = csvRecord.get("Working start time");
+                String working_end = csvRecord.get("Working end time");
+                String working_duration = csvRecord.get("Working duration");
 
-                    PartlogsEntity logEntity = new PartlogsEntity(
+                PartlogsEntity logEntity = new PartlogsEntity(
                         log_index,
                         bar_length,
                         length,
@@ -93,69 +95,70 @@ public class CSVHelper {
             }
 
             return logsEntities;
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-           throw new RuntimeException("error parsing partslog");
+            throw new RuntimeException("error parsing partslog");
         }
 
     }
 
 
-    public static void csvToErrorlog() {
-        try(Reader r = Files.newBufferedReader(Paths.get(ERROR_FILE_PATHL)))
-        {
-            CSVParser parser = new CSVParser(r,CSVFormat.DEFAULT
-                    .withFirstRecordAsHeader()
-                    .withDelimiter(';'));
+    public static List<ErrorEntity>  csvToErrorlog() {
+        try {
+            CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATHL), CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader());
+            Iterator<CSVRecord> iterator = parser.iterator();
 
-            ErrorEntity errorEntity = null;
-            List<ErrorEntity> errorList = new ArrayList<>();
+            List<ErrorEntity> errorEntityList = new ArrayList<>();
+            ErrorEntity tempError = null;
 
-            for (CSVRecord record : parser) {
+            while (iterator.hasNext()) {
+                CSVRecord record = iterator.next();
+
                 if (isNumeric(record.get(0))) {
-                    errorEntity = new ErrorEntity();
-                    errorEntity.setCode(Integer.parseInt(record.get(0)));
-                    errorEntity.setDescription(record.get(1));
-                    if (record.size() >= 6) {
-                        String duration = record.get(2).isEmpty() ? "" : record.get(2);
-                        errorEntity.setDuration(duration);
-                        errorEntity.setOccurences(Integer.parseInt(record.get(3)));
-                        errorEntity.setState(record.get(4));
-                        errorEntity.setDate(LocalDateTime.parse(record.get(5), DATE_TIME_FORMATTER));
+                    if (record.size() > 2) {
+                        ErrorEntity errorEntity = new ErrorEntity(
+                                Integer.parseInt(record.get(0)),
+                                record.get(1),
+                                record.get(2),
+                                Integer.parseInt(record.get(3)),
+                                record.get(4),
+                                LocalDateTime.parse(record.get(5), DATE_TIME_FORMATTER)
+                        );
+                        errorEntityList.add(errorEntity);
+                    } else {
+                        tempError = new ErrorEntity();
+                        tempError.setCode(Integer.valueOf(record.get(0)));
+                        tempError.setDescription(record.get(1));
                     }
-                    errorList.add(errorEntity);
-                } else if (errorEntity != null) {
-                    errorEntity.setDescription(errorEntity.getDescription() + record.get(1));
-                    errorEntity.setDate(LocalDateTime.parse(record.get(4), DATE_TIME_FORMATTER));
-                    errorEntity.setState(record.get(3));
-                    errorEntity.setOccurences(Integer.valueOf(record.get(2)));
-                    errorEntity.setDuration(record.get(3));
+                } else {
+                    if (tempError != null) {
+                        ErrorEntity errorEntity = new ErrorEntity(
+                                tempError.getCode(),
+                                tempError.getDescription() + " " + record.get(0),
+                                record.get(1),
+                                Integer.parseInt(record.get(2)),
+                                record.get(3),
+                                LocalDateTime.parse(record.get(4), DATE_TIME_FORMATTER)
+                        );
+                        errorEntityList.add(errorEntity);
+                        tempError = null; // Reinizializza tempError
+                    }
                 }
             }
 
-            errorList.forEach(System.out::println);
-
-            if (errorEntity != null) {
-                errorList.add(errorEntity);
-            }
-
-
-
-            parser.close();
-        }catch (Exception e){
+            return errorEntityList;
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
+        return null;
     }
 
-    public static boolean isNumeric(String num)
-    {
-        try{
-            int n = Integer.parseInt(num);
+
+    public static boolean isNumeric(String num) {
+        try {
+            Integer.parseInt(num);
             return true;
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }

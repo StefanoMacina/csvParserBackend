@@ -45,9 +45,9 @@ public class ErrorService implements IErrorService {
     @Override
     public void save() {
         try {
-//          List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
-            CSVHelper.csvToErrorlog();
-//           errorRepository.saveAll(errorEntities);
+          List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
+           // CSVHelper.csvToErrorlog();
+          errorRepository.saveAll(errorEntities);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
