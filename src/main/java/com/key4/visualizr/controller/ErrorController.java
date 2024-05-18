@@ -41,7 +41,7 @@ public class ErrorController {
             @RequestParam(
                     value = "orderBy",
                     required = false,
-                    defaultValue = "id") String orderBy,
+                    defaultValue = "date") String orderBy,
             @RequestParam(
                     name = "dir",
                     required = false,
