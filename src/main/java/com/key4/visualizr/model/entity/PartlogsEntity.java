@@ -1,5 +1,6 @@
 package com.key4.visualizr.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -46,10 +47,12 @@ public class PartlogsEntity {
     @Nullable
     private String colour;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "Start time")
     @Nullable
     private LocalDateTime startTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "End time")
     @Nullable
     private LocalDateTime endTime;
