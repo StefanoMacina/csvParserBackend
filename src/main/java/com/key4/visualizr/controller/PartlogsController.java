@@ -36,7 +36,7 @@ public class PartlogsController {
             @RequestParam(name = "size") int size,
             @RequestParam(name = "orderBy",
                     required = false,
-                defaultValue = "id") String orderBy,
+                defaultValue = "endTime") String orderBy,
             @RequestParam(name = "dir",
                     required = false,
                     defaultValue = "-1"

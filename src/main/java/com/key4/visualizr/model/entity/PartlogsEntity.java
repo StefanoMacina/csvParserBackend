@@ -4,6 +4,9 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
+
+import java.time.LocalDateTime;
 
 
 @Entity @NoArgsConstructor @Data
@@ -26,7 +29,6 @@ public class PartlogsEntity {
     @Column(name = "Is a rest piece")
     private boolean restPiece;
 
-
     @Column(name = "Job Code")
     private String jobCode;
 
@@ -46,11 +48,11 @@ public class PartlogsEntity {
 
     @Column(name = "Start time")
     @Nullable
-    private String startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "End time")
     @Nullable
-    private String endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "Total span")
     @Nullable
@@ -103,8 +105,8 @@ public class PartlogsEntity {
 
 
     public PartlogsEntity(int logIndex, double bar_length, double length, boolean restPiece, String jobCode, String article,
-                          @Nullable String barcode, String profileCode, @Nullable String colour, @Nullable String startTime,
-                          @Nullable String endTime, @Nullable String totalSpan, @Nullable String totalProducingSpan,
+                          @Nullable String barcode, String profileCode, @Nullable String colour, @Nullable LocalDateTime startTime,
+                          @Nullable LocalDateTime endTime, @Nullable String totalSpan, @Nullable String totalProducingSpan,
                           @Nullable String overfeed, String operator, boolean completed, boolean redone, @Nullable String redoneReason,
                           @Nullable String armingStartTime, @Nullable String armingEndTime, @Nullable String armingDuration,
                           @Nullable String workingStartTime, @Nullable String workingEndTime, @Nullable String workingDuration) {

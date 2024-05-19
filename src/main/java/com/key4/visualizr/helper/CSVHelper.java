@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.cglib.core.Local;
 import org.springframework.validation.Errors;
 
 public class CSVHelper {
@@ -49,8 +50,8 @@ public class CSVHelper {
                 String barcode = csvRecord.get("Barcode");
                 String profileCode = csvRecord.get("Profile code");
                 String colour = csvRecord.get("Colour");
-                String startTime = csvRecord.get("Start time");
-                String endTime = csvRecord.get("End time");
+                LocalDateTime startTime = csvRecord.get("Start time").isBlank() ? null : LocalDateTime.parse(csvRecord.get("Start time"),DATE_TIME_FORMATTER) ;
+                LocalDateTime endTime = csvRecord.get("End time").isBlank() ? null : LocalDateTime.parse(csvRecord.get("End time"), DATE_TIME_FORMATTER);
                 String totalSpan = csvRecord.get("Total span");
                 String totalProducingSpan = csvRecord.get("Total producing span");
                 String overfeed = csvRecord.get("Overfeed");
@@ -75,8 +76,8 @@ public class CSVHelper {
                         barcode,
                         profileCode,
                         colour,
-                        startTime.isBlank() ? "" : startTime,
-                        endTime.isBlank() ? "" : endTime,
+                        startTime,
+                        endTime,
                         totalSpan.isBlank() ? "" : totalSpan,
                         totalProducingSpan.isBlank() ? "" : totalProducingSpan,
                         overfeed.isBlank() ? "" : overfeed,
