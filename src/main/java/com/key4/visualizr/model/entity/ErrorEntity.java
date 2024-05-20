@@ -30,6 +30,7 @@ public class ErrorEntity {
     @Nullable
     private Integer occurences;
 
+
     @Column(name = "state")
     private String state;
 
@@ -40,7 +41,7 @@ public class ErrorEntity {
     public ErrorEntity(Integer code, String description,
                        String duration, Integer occurences,
                        String state, LocalDateTime date
-                       ) {
+    ) {
         this.code = code;
         this.description = description;
         this.duration = duration;

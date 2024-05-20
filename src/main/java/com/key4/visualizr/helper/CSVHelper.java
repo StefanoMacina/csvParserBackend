@@ -13,21 +13,17 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.cglib.core.Local;
-import org.springframework.validation.Errors;
 
 public class CSVHelper {
 
     public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
     public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
-    public static final String LOGS_FILE_PATHL = "/home/quark/Desktop/i4Parts_log.csv";
-    public static final String ERROR_FILE_PATHL = "/home/quark/Desktop/i4Error_log.csv";
     final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
     final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public static List<PartlogsEntity> csvToPartlog() {
         try (
-                Reader reader = Files.newBufferedReader(Paths.get(LOGS_FILE_PATHL));
+                Reader reader = Files.newBufferedReader(Paths.get(LOGS_FILE_PATH));
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()
@@ -106,7 +102,8 @@ public class CSVHelper {
 
     public static List<ErrorEntity>  csvToErrorlog() {
         try {
-            CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATHL), CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader());
+            CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATH),
+                    CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader());
             Iterator<CSVRecord> iterator = parser.iterator();
 
             List<ErrorEntity> errorEntityList = new ArrayList<>();
@@ -140,7 +137,7 @@ public class CSVHelper {
                                 Integer.parseInt(record.get(2)),
                                 record.get(3),
                                 LocalDateTime.parse(record.get(4), DATE_TIME_FORMATTER)
-                        );
+                                );
                         errorEntityList.add(errorEntity);
                         tempError = null;
                     }
