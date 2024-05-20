@@ -19,14 +19,14 @@ public class ErrorEntity {
     @Column(name = "code")
     private Integer code;
 
-    @Column(name = "description",length = 500)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "duration (hh:mm:Ss)")
+    @Column(name = "duration")
     @Nullable
     private String duration;
 
-    @Column(name = "occurrences")
+    @Column(name = "occurences")
     @Nullable
     private Integer occurences;
 

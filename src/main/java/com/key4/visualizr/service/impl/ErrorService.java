@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -43,6 +46,19 @@ public class ErrorService implements IErrorService {
     }
 
     @Override
+    public Page<ErrorEntity> getErrorsInRange(LocalDate fromDate,
+                                              LocalDate toDate,
+                                              int directionNumber,
+                                              int page, int size,
+                                              String... orderBy
+    ) {
+        PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
+                directionNumber != -1 ? "asc" : "desc"
+        ),orderBy);
+        return errorRepository.getErrorsByRange(fromDate, toDate, pr);
+    }
+
+    @Override
     public void save() {
         try {
           List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
@@ -53,4 +69,6 @@ public class ErrorService implements IErrorService {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }
+
+
 }
