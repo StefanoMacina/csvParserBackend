@@ -114,28 +114,21 @@ public class CSVHelper {
 
             List<ErrorEntity> errorEntities = new ArrayList<>();
 
-            for(int i=0;i<records.size();i++) {
+            for(int i=0;i<records.size()-1;i++) {
 
                 if (isNumeric(records.get(i).get(0))) {
                     if (records.get(i).size() >= 6) {
                         errorEntities.add(new ErrorEntity(
                                 Integer.parseInt(records.get(i).get(0)),
-                                records.get(i).get(1),
-                                records.get(i).get(2).isBlank() ? null : records.get(i).get(2),
-                                records.get(i).get(3).isBlank() ? null : Integer.parseInt(records.get(i).get(3)),
-                                records.get(i).get(4).isBlank() ? null : records.get(i).get(4),
-                                records.get(i).get(5).isBlank() ? null : LocalDateTime.parse(records.get(i).get(5), DATE_TIME_FORMATTER))
-                        );
+                                String.format("%S %S",records.get(i).get(1), records.get(i+1).get(0)),
+                                records.get(i).get(2).isEmpty() ? records.get(i + 1).get(1) : records.get(i).get(2),
+                                records.get(i).get(3).isEmpty() ? Integer.parseInt(records.get(i+1).get(2)) : Integer.parseInt(records.get(i).get(3)),
+                                records.get(i).get(4).isEmpty() ? records.get(i+1).get(3) : records.get(i).get(4),
+                                records.get(i).get(5).isEmpty() ? LocalDateTime.parse(records.get(i+1).get(4), DATE_TIME_FORMATTER) : LocalDateTime.parse(records.get(i).get(5), DATE_TIME_FORMATTER)
+                        ));
                     }
                 } else {
-                    errorEntities.add(new ErrorEntity(
-                            Integer.parseInt(records.get(i - 1).get(0)),
-                            String.format("%s %s", records.get(i - 1).get(1), records.get(i).get(0)),
-                            records.get(i).get(1),
-                            Integer.parseInt(records.get(i).get(2)),
-                            records.get(i).get(3),
-                            LocalDateTime.parse(records.get(i).get(4),DATE_TIME_FORMATTER)
-                    ));
+                    i += 1;
                 }
             }
 
