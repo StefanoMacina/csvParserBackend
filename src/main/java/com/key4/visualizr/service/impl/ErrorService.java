@@ -46,6 +46,7 @@ public class ErrorService implements IErrorService {
     public void save() {
         try {
           List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
+
           errorRepository.saveAll(errorEntities);
         } catch (Exception e) {
             e.printStackTrace();

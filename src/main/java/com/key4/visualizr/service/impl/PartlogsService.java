@@ -21,6 +21,7 @@ public class PartlogsService implements IPartlogsService {
     @Override
     public void save(){
         try {
+
             List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
             pl.saveAll(logsEntities);
         } catch (Exception e) {

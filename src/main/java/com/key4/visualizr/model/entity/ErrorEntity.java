@@ -5,7 +5,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +29,6 @@ public class ErrorEntity {
     @Column(name = "occurrences")
     @Nullable
     private Integer occurences;
-
 
     @Column(name = "state")
     private String state;

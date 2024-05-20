@@ -33,11 +33,17 @@ public class PartlogsController {
 
     @GetMapping("/pagpartlogs")
     public ResponseEntity<Page<PartlogsEntity>> getAllPaginated(
-            @RequestParam(name = "page") int page,
-            @RequestParam(name = "size") int size,
+            @RequestParam(name = "page",
+                    required = false,
+                    defaultValue = "0"
+            ) int page,
+            @RequestParam(name = "size",
+                    required = false,
+                    defaultValue = "20"
+            ) int size,
             @RequestParam(name = "orderBy",
                     required = false,
-                defaultValue = "endTime") String orderBy,
+                    defaultValue = "endTime") String orderBy,
             @RequestParam(name = "dir",
                     required = false,
                     defaultValue = "-1"
