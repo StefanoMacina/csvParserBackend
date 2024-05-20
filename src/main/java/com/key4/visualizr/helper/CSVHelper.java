@@ -103,7 +103,7 @@ public class CSVHelper {
     public static List<ErrorEntity>  csvToErrorlog() {
         try {
             CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATH),
-                    CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader());
+                    CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader().withAllowMissingColumnNames());
             Iterator<CSVRecord> iterator = parser.iterator();
 
             List<ErrorEntity> errorEntityList = new ArrayList<>();
@@ -118,9 +118,9 @@ public class CSVHelper {
                                 Integer.parseInt(record.get(0)),
                                 record.get(1),
                                 record.get(2),
-                                Integer.parseInt(record.get(3)),
+                                record.get(3).isBlank() ? 0 : Integer.parseInt(record.get(3)),
                                 record.get(4),
-                                LocalDateTime.parse(record.get(5), DATE_TIME_FORMATTER)
+                                record.get(5).isEmpty() ? null : LocalDateTime.parse(record.get(5),DATE_TIME_FORMATTER)
                         );
                         errorEntityList.add(errorEntity);
                     } else {

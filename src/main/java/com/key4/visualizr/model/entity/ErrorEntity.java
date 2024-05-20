@@ -1,5 +1,6 @@
 package com.key4.visualizr.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class ErrorEntity {
     @Column(name = "state")
     private String state;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "date")
     private LocalDateTime date;
 
