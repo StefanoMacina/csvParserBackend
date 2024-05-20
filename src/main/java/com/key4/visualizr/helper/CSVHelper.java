@@ -116,80 +116,43 @@ public class CSVHelper {
 
             for(int i=0;i<records.size()-1;i++) {
 
-                if (isNumeric(records.get(i).get(0))) {
-                    if (records.get(i).size() >= 6) {
-                        errorEntities.add(new ErrorEntity(
-                                Integer.parseInt(records.get(i).get(0)),
-                                String.format("%S %S",records.get(i).get(1), records.get(i+1).get(0)),
-                                records.get(i).get(2).isEmpty() ? records.get(i + 1).get(1) : records.get(i).get(2),
-                                records.get(i).get(3).isEmpty() ? Integer.parseInt(records.get(i+1).get(2)) : Integer.parseInt(records.get(i).get(3)),
-                                records.get(i).get(4).isEmpty() ? records.get(i+1).get(3) : records.get(i).get(4),
-                                records.get(i).get(5).isEmpty() ? LocalDateTime.parse(records.get(i+1).get(4), DATE_TIME_FORMATTER) : LocalDateTime.parse(records.get(i).get(5), DATE_TIME_FORMATTER)
-                        ));
-                    }
-                } else {
-                    i += 1;
-                }
-            }
+                    CSVRecord record = records.get(i);
+                    CSVRecord nextRecord = records.get(i+1);
 
+                    if(isNumeric(record.get(0))){
+                        if(record.get(3).isEmpty()){
+                           errorEntities.add(
+                                   new ErrorEntity(
+                                           Integer.parseInt(record.get(0)),
+                                           String.format("%s %s",record.get(1), nextRecord.get(0)),
+                                           nextRecord.get(1),
+                                           Integer.parseInt(nextRecord.get(2)),
+                                           nextRecord.get(3),
+                                           LocalDateTime.parse(nextRecord.get(4),DATE_TIME_FORMATTER)
+                                   )
+                           );
+                        } else {
+                            errorEntities.add(
+                                    new ErrorEntity(
+                                            Integer.parseInt(record.get(0)),
+                                            record.get(1),
+                                            record.get(2),
+                                            Integer.parseInt(record.get(3)),
+                                            record.get(4),
+                                            LocalDateTime.parse(record.get(5),DATE_TIME_FORMATTER)
+                                    )
+                            );
+                        }
+                    } else {
+                        i += 1;
+                    }
+            }
             return errorEntities;
         }catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
-
-
-
-//    public static List<ErrorEntity>  csvToErrorlog() {
-//        try {
-//            CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATH),
-//                    CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader().withAllowMissingColumnNames());
-//            Iterator<CSVRecord> iterator = parser.iterator();
-//
-//            List<ErrorEntity> errorEntityList = new ArrayList<>();
-//            ErrorEntity tempError = null;
-//
-//            while (iterator.hasNext()) {
-//                CSVRecord record = iterator.next();
-//
-//                if (isNumeric(record.get(0))) {
-//                    if (record.size() > 5) {
-//                        ErrorEntity errorEntity = new ErrorEntity(
-//                                Integer.parseInt(record.get(0)),
-//                                record.get(1),
-//                                record.get(2),
-//                                record.get(3).isBlank() ? 0 : Integer.parseInt(record.get(3)),
-//                                record.get(4),
-//                                record.get(5).isEmpty() ? null : LocalDateTime.parse(record.get(5),DATE_TIME_FORMATTER)
-//                        );
-//                        errorEntityList.add(errorEntity);
-//                    } else {
-//                        tempError = new ErrorEntity();
-//                        tempError.setCode(Integer.valueOf(record.get(0)));
-//                        tempError.setDescription(record.get(1));
-//                    }
-//                } else {
-//                    if (tempError != null) {
-//                        ErrorEntity errorEntity = new ErrorEntity(
-//                                tempError.getCode(),
-//                                String.format("%s %s",tempError.getDescription(),record.get(0)),
-//                                record.get(1),
-//                                Integer.parseInt(record.get(2)),
-//                                record.get(3),
-//                                record.get(4).isEmpty() ? null : LocalDateTime.parse(record.get(4),DATE_TIME_FORMATTER));
-//                        errorEntityList.add(errorEntity);
-//                        tempError = null;
-//                    }
-//                }
-//            }
-//            return errorEntityList;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
 
     public static boolean isNumeric(String num) {
         try {
