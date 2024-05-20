@@ -1,6 +1,5 @@
 package com.key4.visualizr.repository;
 
-import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.model.entity.PartlogsEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +17,6 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
             "OR e.state LIKE %:keyword%",
             nativeQuery = true
     )
-    Page<ErrorEntity> search(@Param("keyword") String keyword, Pageable pageable);
+    Page<PartlogsEntity> search(@Param("keyword") String keyword, Pageable pageable);
 
 }

@@ -14,8 +14,6 @@ public interface IErrorService {
 
     Page<ErrorEntity> fullTextResearch(int page, int size, String keyword ,int direction, String... orderBy);
 
-   // List<ErrorEntity> search(String searchText);
-
     void save();
 
 }

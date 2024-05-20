@@ -44,4 +44,14 @@ public class PartlogsService implements IPartlogsService {
         return pl.findAll(pageRequest);
     }
 
+    @Override
+    public Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword, int direction, String... orderBy) {
+
+        PageRequest pageRequest = PageRequest.of(page,size,Sort.Direction.fromString(
+                direction != -1 ? "asc" : "desc"
+        ),orderBy);
+
+        return pl.search(String.valueOf(keyword),pageRequest);
+    }
+
 }
