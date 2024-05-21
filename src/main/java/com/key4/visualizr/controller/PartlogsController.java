@@ -69,7 +69,7 @@ public class PartlogsController {
                             Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInSTimeRange(
                                     fromDate != null ? LocalDate.parse(fromDate, formatter) :  LocalDate.parse("1980-10-01",formatter),
                                     toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
-                                    page, size, direction, "starttime"
+                                    page, size, direction, "start_time"
                             );
                             return new ResponseEntity<>(startTimeRange, HttpStatus.OK);
                         } catch (Exception e) {
