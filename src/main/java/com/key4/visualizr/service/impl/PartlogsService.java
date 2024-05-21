@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PartlogsService implements IPartlogsService {
@@ -52,25 +51,25 @@ public class PartlogsService implements IPartlogsService {
     }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginatedInStartTimeRange(LocalDate fromDate, LocalDate toDate, int page,
+    public Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fromDate, LocalDate toDate, int page,
                                                 int size, int directionNumber, String... orderBy) {
 
         PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
                 directionNumber != -1 ? "asc" : "desc"
         ),orderBy));
 
-        return pl.getPartLogsBetweenStartTime(fromDate, toDate, pageRequest);
+        return pl.getPartLogsBetweenSTime(fromDate, toDate, pageRequest);
     }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginatedInEndTimeRange(LocalDate fromDate, LocalDate toDate, int page,
+    public Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, int page,
                                                                 int size, int directionNumber, String... orderBy) {
 
         PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
                 directionNumber != -1 ? "asc" : "desc"
         ),orderBy));
 
-        return pl.getPartLogsBetweenEndTime(fromDate, toDate, pageRequest);
+        return pl.getPartLogsBetweenETime(fromDate, toDate, pageRequest);
     }
 
     @Override

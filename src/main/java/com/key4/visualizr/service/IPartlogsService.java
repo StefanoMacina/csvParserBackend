@@ -13,10 +13,10 @@ public interface IPartlogsService {
 
     Page<PartlogsEntity> getAllPaginated(int page,int size, int direction, String... orderby);
 
-    Page<PartlogsEntity> getAllPaginatedInStartTimeRange(LocalDate fomDate, LocalDate toDate, int page,
+    Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fomDate, LocalDate toDate, int page,
                                          int size, int directionNumber, String... orderBy);
 
-    Page<PartlogsEntity> getAllPaginatedInEndTimeRange(LocalDate fromDate, LocalDate toDate, int page,
+    Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, int page,
                                                        int size, int directionNumber, String... orderBy);
 
     Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword , int direction, String... orderBy);

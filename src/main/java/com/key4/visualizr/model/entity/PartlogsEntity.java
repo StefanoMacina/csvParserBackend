@@ -108,8 +108,8 @@ public class PartlogsEntity {
 
 
     public PartlogsEntity(int logIndex, double bar_length, double length, boolean restPiece, String jobCode, String article,
-                          @Nullable String barcode, String profileCode, @Nullable String colour, @Nullable LocalDateTime startTime,
-                          @Nullable LocalDateTime endTime, @Nullable String totalSpan, @Nullable String totalProducingSpan,
+                          @Nullable String barcode, String profileCode, @Nullable String colour, @Nullable LocalDateTime start_time,
+                          @Nullable LocalDateTime end_time, @Nullable String totalSpan, @Nullable String totalProducingSpan,
                           @Nullable String overfeed, String operator, boolean completed, boolean redone, @Nullable String redoneReason,
                           @Nullable String armingStartTime, @Nullable String armingEndTime, @Nullable String armingDuration,
                           @Nullable String workingStartTime, @Nullable String workingEndTime, @Nullable String workingDuration) {
@@ -122,8 +122,8 @@ public class PartlogsEntity {
         this.barcode = barcode;
         this.profileCode = profileCode;
         this.colour = colour;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = start_time;
+        this.endTime = end_time;
         this.totalSpan = totalSpan;
         this.totalProducingSpan = totalProducingSpan;
         this.overfeed = overfeed;

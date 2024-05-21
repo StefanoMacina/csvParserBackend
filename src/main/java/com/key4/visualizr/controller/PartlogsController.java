@@ -53,7 +53,7 @@ public class PartlogsController {
 
             if(fromDate == null && toDate == null){
                 try {
-                    Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction, orderBy);
+                    Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction,"startTime" );
 
                     if (paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -66,10 +66,10 @@ public class PartlogsController {
                 switch (range) {
                     case "startTime": {
                         try {
-                            Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInStartTimeRange(
+                            Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInSTimeRange(
                                     fromDate != null ? LocalDate.parse(fromDate, formatter) :  LocalDate.parse("1980-10-01",formatter),
                                     toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
-                                    page, size, direction, "start_time"
+                                    page, size, direction, "starttime"
                             );
                             return new ResponseEntity<>(startTimeRange, HttpStatus.OK);
                         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class PartlogsController {
                     }
                     case "endTime": {
                         try {
-                            Page<PartlogsEntity> endTimeRange = ps.getAllPaginatedInEndTimeRange(
+                            Page<PartlogsEntity> endTimeRange = ps.getAllPaginatedInETimeRange(
                                     fromDate != null ? LocalDate.parse(fromDate, formatter) : LocalDate.parse("1980-10-01",formatter),
                                     toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
                                     page, size, direction, "start_time"
@@ -114,7 +114,6 @@ public class PartlogsController {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
     }
 
 
