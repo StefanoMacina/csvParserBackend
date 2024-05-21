@@ -64,7 +64,8 @@ public class ErrorController {
                         name = "toDate",
                         required = false
                 ) String toDate
-    ) {
+    )
+        {
             if(fromDate != null){
                 try{
                     Page<ErrorEntity> paginatedErrorsInRange = errorService.getErrorsInRange(
@@ -98,7 +99,7 @@ public class ErrorController {
                     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
-    }
+        }
 
 
     @PostMapping("/errorsUpload")

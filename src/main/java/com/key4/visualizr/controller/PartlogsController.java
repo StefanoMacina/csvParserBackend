@@ -2,11 +2,16 @@ package com.key4.visualizr.controller;
 import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.service.impl.PartlogsService;
+import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -16,6 +21,8 @@ public class PartlogsController {
 
     @Autowired
     PartlogsService ps;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @GetMapping("/partlogs")
     public ResponseEntity<List<PartlogsEntity>> getAllLogs(){
@@ -51,8 +58,49 @@ public class PartlogsController {
             @RequestParam(
                     name = "globalfilter",
                     required = false
-            )String keyword
+            )String keyword,
+            @RequestParam(
+                    name = "range",
+                    required = false
+            ) String range,
+            @RequestParam(
+                    name = "fromDate",
+                    required = false
+            ) String fromDate,
+            @RequestParam(
+                    name = "toDate",
+                    required = false
+            ) String toDate
     ) {
+        switch (range){
+            case "startTime" : {
+                try{
+                    Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInStartTimeRange(
+                            LocalDate.parse(fromDate, formatter),
+                            toDate != null ? LocalDate.parse(toDate,formatter) : LocalDate.now(),
+                            page,size,direction, "start_time"
+                    );
+                    return new ResponseEntity<>(startTimeRange ,HttpStatus.OK);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+            case "endTime" : {
+                try{
+                    Page<PartlogsEntity> endTimeRange = ps.getAllPaginatedInEndTimeRange(
+                            LocalDate.parse(fromDate,formatter),
+                            toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
+                            page,size,direction,"end_time"
+                    );
+                    return new ResponseEntity<>(endTimeRange,HttpStatus.OK);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
+
         if(keyword != null){
             try {
                 Page<PartlogsEntity> paginatedSearchData = ps.fullTextResearch(page,size,keyword,direction,orderBy);

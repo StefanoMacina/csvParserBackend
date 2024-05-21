@@ -48,12 +48,12 @@ public class PartlogsEntity {
     private String colour;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "Start time")
+    @Column(name = "startTime")
     @Nullable
     private LocalDateTime startTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "End time")
+    @Column(name = "endTime")
     @Nullable
     private LocalDateTime endTime;
 

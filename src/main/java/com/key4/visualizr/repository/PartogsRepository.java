@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+
 @Repository
 public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer> {
 
@@ -18,5 +20,24 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
             nativeQuery = true
     )
     Page<PartlogsEntity> search(@Param("keyword") String keyword, Pageable pageable);
+
+
+    @Query(value = "SELECT * FROM partslogs e WHERE " +
+            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+            nativeQuery = true)
+    Page<PartlogsEntity> getPartLogsBetweenStartTime(
+            @Param("fromDate")LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
+            Pageable pageable
+            );
+
+    @Query(value = "SELECT * FROM partslogs e WHERE " +
+            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+            nativeQuery = true)
+    Page<PartlogsEntity> getPartLogsBetweenEndTime(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
+            Pageable pageable
+    );
 
 }
