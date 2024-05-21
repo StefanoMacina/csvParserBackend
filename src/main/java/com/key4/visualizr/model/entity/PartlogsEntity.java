@@ -30,34 +30,34 @@ public class PartlogsEntity {
     @Column(name = "Is a rest piece")
     private boolean restPiece;
 
-    @Column(name = "Job Code")
+    @Column(name = "job_code")
     private String jobCode;
 
     @Column(name = "Article")
     private String article;
 
-    @Column(name = "Barcode")
+    @Column(name = "bar_code")
     @Nullable
     private String barcode;
 
-    @Column(name = "Profile code")
+    @Column(name = "profile_code")
     private String profileCode;
 
-    @Column(name = "Colour")
+    @Column(name = "color")
     @Nullable
     private String colour;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "startTime")
+    @Column(name = "start_time")
     @Nullable
     private LocalDateTime startTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "endTime")
+    @Column(name = "end_time")
     @Nullable
     private LocalDateTime endTime;
 
-    @Column(name = "Total span")
+    @Column(name = "total_span")
     @Nullable
     private String totalSpan;
 

@@ -17,9 +17,10 @@ import java.util.Optional;
 public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer> {
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.description LIKE %:keyword% " +
-            "OR e.code LIKE %:keyword% " +
-            "OR e.state LIKE %:keyword%",
+            "e.job_code LIKE %:keyword% " +
+            "OR e.article LIKE %:keyword% " +
+            "OR e.profile_code LIKE %:keyword% " +
+            "OR e.color LIKE %:keyword%",
             nativeQuery = true
     )
     Page<PartlogsEntity> search(@Param("keyword") String keyword, Pageable pageable);
