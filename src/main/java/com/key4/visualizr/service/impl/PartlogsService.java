@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PartlogsService implements IPartlogsService {
@@ -22,9 +23,13 @@ public class PartlogsService implements IPartlogsService {
     @Override
     public void save(){
         try {
-
             List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
             pl.saveAll(logsEntities);
+
+            for(PartlogsEntity csvRecord: logsEntities){
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("fail to store csv data: " + e.getMessage());

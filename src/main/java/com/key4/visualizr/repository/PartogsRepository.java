@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer> {
@@ -39,5 +42,11 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
             @Param("toDate") LocalDate toDate,
             Pageable pageable
     );
+
+//    Optional<PartlogsEntity> getOneBylogIndexStartTime(
+//            @Param("log index") Integer logIndex,
+//            @Param("start_time") LocalDateTime startTime
+//            );
+
 
 }
