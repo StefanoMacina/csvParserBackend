@@ -3,6 +3,7 @@ import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.service.impl.PartlogsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,22 @@ public class PartlogsController {
             @RequestParam(name = "fromDate", required = false) String fromDate,
             @RequestParam(name = "toDate", required = false) String toDate
     ) {
+
+        if(range != null && keyword != null){
+            try{
+                Page<PartlogsEntity> searchInRange = ps.fulltextInRange(
+                        page,size,keyword,direction,
+                        fromDate != null ? LocalDate.parse(fromDate,formatter) : LocalDate.parse("1980-10-01",formatter),
+                        toDate != null ? LocalDate.parse(toDate,formatter) : LocalDate.now(),
+                        orderBy.equals("startTime") ? "start_time" : orderBy
+                 );
+                return new ResponseEntity<>(searchInRange,HttpStatus.OK);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
         if (range != null) {
 
             if(fromDate == null && toDate == null){
@@ -77,12 +94,12 @@ public class PartlogsController {
                     }
                     case "endTime": {
                         try {
-                            Page<PartlogsEntity> endTimeRange = ps.getAllPaginatedInETimeRange(
-                                    fromDate != null ? LocalDate.parse(fromDate, formatter) : LocalDate.parse("1980-10-01",formatter),
-                                    toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
-                                    page, size, direction, "start_time"
-                            );
-                            return new ResponseEntity<>(endTimeRange, HttpStatus.OK);
+                            Page<PartlogsEntity> endTimeSearchinRange = ps.fulltextInRange(page,size,keyword,direction,
+                                    LocalDate.parse(fromDate,formatter),
+                                    LocalDate.parse(toDate,formatter)
+                                    ,orderBy);
+
+                            return new ResponseEntity<>(endTimeSearchinRange,HttpStatus.OK);
                         } catch (Exception e) {
                             e.printStackTrace();
                             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

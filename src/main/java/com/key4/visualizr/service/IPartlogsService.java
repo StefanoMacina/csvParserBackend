@@ -18,8 +18,9 @@ public interface IPartlogsService {
     Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, int page,
                                                        int size, int directionNumber, String... orderBy);
 
-    Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword , int direction, String... orderBy);
+    Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword, int direction, String... orderBy);
 
+    Page<PartlogsEntity> fulltextInRange(int page, int size, String keyword , int direction, LocalDate fromDate, LocalDate toDate, String... orderBy);
 
     int save();
 

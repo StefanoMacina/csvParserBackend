@@ -87,4 +87,16 @@ public class PartlogsService implements IPartlogsService {
         return pl.search(String.valueOf(keyword),pageRequest);
     }
 
+
+
+    @Override
+    public Page<PartlogsEntity> fulltextInRange(int page, int size, String keyword, int direction,
+                                                LocalDate fromDate, LocalDate toDate, String... orderBy) {
+        PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
+                direction != -1 ? "asc" : "desc"
+        ), orderBy);
+
+        return pl.searchInRange(keyword,pr,fromDate,toDate);
+    }
+
 }
