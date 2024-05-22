@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PartlogsService implements IPartlogsService {
@@ -23,11 +24,15 @@ public class PartlogsService implements IPartlogsService {
     public void save(){
         try {
             List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
+
+            List<PartlogsEntity> dbEntities = pl.findAll();
+
+            logsEntities.removeIf(dbEntities::contains);
+
             pl.saveAll(logsEntities);
 
-            for(PartlogsEntity csvRecord: logsEntities){
+            System.out.println(logsEntities.size() + " ------------ " + dbEntities.size());
 
-            }
 
         } catch (Exception e) {
             e.printStackTrace();

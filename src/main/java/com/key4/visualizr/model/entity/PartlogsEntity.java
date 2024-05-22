@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Entity @NoArgsConstructor @Data
@@ -137,6 +138,22 @@ public class PartlogsEntity {
         this.workingStartTime = workingStartTime;
         this.workingEndTime = workingEndTime;
         this.workingDuration = workingDuration;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PartlogsEntity that = (PartlogsEntity) o;
+        return Objects.equals(logIndex, that.logIndex) &&
+                Objects.equals(startTime, that.startTime) &&
+                Objects.equals(endTime, that.endTime) &&
+                Objects.equals(article, that.article);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(logIndex, startTime, endTime, article);
     }
 }
 

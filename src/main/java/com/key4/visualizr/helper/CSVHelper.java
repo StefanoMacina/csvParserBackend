@@ -103,6 +103,7 @@ public class CSVHelper {
     }
 
     public static List<ErrorEntity> csvToErrorlog(){
+
         try{
             CSVFormat csvFormat = CSVFormat.DEFAULT
                     .withFirstRecordAsHeader()
@@ -114,7 +115,7 @@ public class CSVHelper {
 
             List<ErrorEntity> errorEntities = new ArrayList<>();
 
-            for(int i=0;i<records.size()-1;i++) {
+            for(int i = 0;i<records.size()-1;i++) {
 
                     CSVRecord record = records.get(i);
                     CSVRecord nextRecord = records.get(i+1);
@@ -152,6 +153,7 @@ public class CSVHelper {
         }catch (Exception e){
             e.printStackTrace();
         }
+
         return null;
     }
 
