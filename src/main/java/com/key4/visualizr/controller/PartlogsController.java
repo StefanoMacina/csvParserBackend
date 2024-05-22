@@ -119,9 +119,7 @@ public class PartlogsController {
     public ResponseEntity<String> uploadLogs( ){
         try {
            int recordsToAdd = ps.save();
-           if(recordsToAdd > 0){
-               return new ResponseEntity<>("upload success", HttpStatus.CREATED);
-           }
+           if(recordsToAdd > 0) return new ResponseEntity<>("upload success", HttpStatus.CREATED);
            return new ResponseEntity<>("no records to add",HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("upload failed",HttpStatus.CONFLICT);

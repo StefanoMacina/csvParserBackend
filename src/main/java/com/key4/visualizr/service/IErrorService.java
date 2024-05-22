@@ -4,7 +4,6 @@ import com.key4.visualizr.model.entity.ErrorEntity;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IErrorService {
@@ -22,6 +21,6 @@ public interface IErrorService {
                                        String... orderBy
     );
 
-    void save();
+    int save();
 
 }

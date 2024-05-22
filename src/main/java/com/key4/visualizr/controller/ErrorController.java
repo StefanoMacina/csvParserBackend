@@ -105,8 +105,8 @@ public class ErrorController {
     @PostMapping("/errorsUpload")
     public ResponseEntity<String> uploadFile() {
         try {
-            errorService.save();
-            return new ResponseEntity<>("upload success",HttpStatus.CREATED);
+            if(errorService.save() > 1) return new ResponseEntity<>("upload success", HttpStatus.CREATED);
+            return new ResponseEntity<>("no records to add",HttpStatus.CREATED);
         }catch (Exception e){
            return new ResponseEntity<>("upload fail",HttpStatus.CONFLICT);
         }

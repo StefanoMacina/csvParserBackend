@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -59,7 +58,7 @@ public class ErrorService implements IErrorService {
     }
 
     @Override
-    public void save() {
+    public int save() {
         try {
 
           List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
@@ -68,6 +67,8 @@ public class ErrorService implements IErrorService {
           errorEntities.removeIf(dbEntities::contains);
 
           errorRepository.saveAll(errorEntities);
+          return errorEntities.size();
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
