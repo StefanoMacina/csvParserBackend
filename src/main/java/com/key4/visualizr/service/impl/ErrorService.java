@@ -61,7 +61,11 @@ public class ErrorService implements IErrorService {
     @Override
     public void save() {
         try {
+
           List<ErrorEntity> errorEntities = CSVHelper.csvToErrorlog();
+          List<ErrorEntity> dbEntities = errorRepository.findAll();
+
+          errorEntities.removeIf(dbEntities::contains);
 
           errorRepository.saveAll(errorEntities);
         } catch (Exception e) {
