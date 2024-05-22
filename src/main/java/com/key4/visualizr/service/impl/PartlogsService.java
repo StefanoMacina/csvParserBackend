@@ -56,25 +56,25 @@ public class PartlogsService implements IPartlogsService {
     }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fromDate, LocalDate toDate, int page,
+    public Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fromDate, LocalDate toDate,  String keyword, int page,
                                                 int size, int directionNumber, String... orderBy) {
 
         PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
                 directionNumber != -1 ? "asc" : "desc"
         ),orderBy));
 
-        return pl.getPartLogsBetweenSTime(fromDate, toDate, pageRequest);
+        return pl.getPartLogsBetweenSTime(fromDate, toDate, keyword,pageRequest);
     }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, int page,
+    public Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, String keyword, int page,
                                                                 int size, int directionNumber, String... orderBy) {
 
         PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
                 directionNumber != -1 ? "asc" : "desc"
         ),orderBy));
 
-        return pl.getPartLogsBetweenETime(fromDate, toDate, pageRequest);
+        return pl.getPartLogsBetweenETime(fromDate, toDate, keyword,pageRequest);
     }
 
     @Override

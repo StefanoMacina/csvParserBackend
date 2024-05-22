@@ -49,65 +49,69 @@ public class PartlogsController {
             @RequestParam(name = "toDate", required = false) String toDate
     ) {
 
-        if(range != null && keyword != null){
-            try{
+        if (range != null && keyword != null) {
+
+            try {
                 Page<PartlogsEntity> searchInRange = ps.fulltextInRange(
-                        page,size,keyword,direction,
-                        fromDate != null ? LocalDate.parse(fromDate,formatter) : LocalDate.parse("1980-10-01",formatter),
-                        toDate != null ? LocalDate.parse(toDate,formatter) : LocalDate.now(),
+                        page, size,
+                        keyword != null ? keyword : "",
+                        direction,
+                        fromDate != null ? LocalDate.parse(fromDate, formatter) : LocalDate.parse("1980-10-01", formatter),
+                        toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.parse(LocalDate.now().toString(),formatter),
                         orderBy.equals("startTime") ? "start_time" : orderBy
-                 );
-                return new ResponseEntity<>(searchInRange,HttpStatus.OK);
-            }catch (Exception e){
+                );
+                return new ResponseEntity<>(searchInRange, HttpStatus.OK);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
 
-        if (range != null) {
+        if (fromDate == null && toDate == null) {
+            try {
+                Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction, "startTime");
 
-            if(fromDate == null && toDate == null){
+                if (paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+                return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        switch (range) {
+            case "startTime": {
                 try {
-                    Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction,"startTime" );
-
-                    if (paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-                    return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
+                    Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInSTimeRange(
+                            fromDate != null ? LocalDate.parse(fromDate, formatter) : LocalDate.parse("1980-10-01", formatter),
+                            toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
+                            keyword != null ? keyword : "",
+                            page, size, direction, "start_time"
+                    );
+                    return new ResponseEntity<>(startTimeRange, HttpStatus.OK);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
-                switch (range) {
-                    case "startTime": {
-                        try {
-                            Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInSTimeRange(
-                                    fromDate != null ? LocalDate.parse(fromDate, formatter) :  LocalDate.parse("1980-10-01",formatter),
-                                    toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
-                                    page, size, direction, "start_time"
-                            );
-                            return new ResponseEntity<>(startTimeRange, HttpStatus.OK);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-                        }
-                    }
-                    case "endTime": {
-                        try {
-                            Page<PartlogsEntity> endTimeSearchinRange = ps.fulltextInRange(page,size,keyword,direction,
-                                    LocalDate.parse(fromDate,formatter),
-                                    LocalDate.parse(toDate,formatter)
-                                    ,orderBy);
+            case "endTime": {
+                try {
+                    Page<PartlogsEntity> endTimeSearchinRange = ps.getAllPaginatedInETimeRange(
+                            fromDate != null ? LocalDate.parse(fromDate) : LocalDate.parse("1980-10-01", formatter),
+                            toDate != null ? LocalDate.parse(toDate) : LocalDate.parse(LocalDate.now().toString(),formatter),
+                            keyword != null ? keyword : "",
+                            page,size,direction
+                            ,"end_time");
 
-                            return new ResponseEntity<>(endTimeSearchinRange,HttpStatus.OK);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-                        }
-                    }
+                    return new ResponseEntity<>(endTimeSearchinRange, HttpStatus.OK);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-
+            }
         }
+
+
 
         if (keyword != null) {
             try {

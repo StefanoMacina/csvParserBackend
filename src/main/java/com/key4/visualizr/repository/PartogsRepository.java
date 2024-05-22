@@ -39,20 +39,31 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
 
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
+            "(e.job_code LIKE %:keyword% " +
+            "OR e.article LIKE %:keyword% " +
+            "OR e.profile_code LIKE %:keyword% " +
+            "OR e.color LIKE %:keyword%) AND "+
             "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
     Page<PartlogsEntity> getPartLogsBetweenSTime(
             @Param("fromDate")LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
+            @Param("keyword") String keyword,
             Pageable pageable
             );
 
+
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
-            nativeQuery = true)
+                    "(e.job_code LIKE %:keyword% " +
+                    "OR e.article LIKE %:keyword% " +
+                    "OR e.profile_code LIKE %:keyword% " +
+                    "OR e.color LIKE %:keyword%) AND " +
+                    "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+                    nativeQuery = true)
     Page<PartlogsEntity> getPartLogsBetweenETime(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
+            @Param("keyword") String keyword,
             Pageable pageable
     );
 
