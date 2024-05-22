@@ -20,7 +20,7 @@ public class PartlogsService implements IPartlogsService {
     PartogsRepository pl;
 
     @Override
-    public void save(){
+    public int save(){
         try {
             List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
 
@@ -32,6 +32,7 @@ public class PartlogsService implements IPartlogsService {
 
             System.out.println(logsEntities.size() + " ------------ " + dbEntities.size());
 
+            return logsEntities.size();
 
         } catch (Exception e) {
             e.printStackTrace();

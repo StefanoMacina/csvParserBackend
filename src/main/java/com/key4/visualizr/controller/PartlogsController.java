@@ -118,8 +118,11 @@ public class PartlogsController {
     @PostMapping("/partslogupload")
     public ResponseEntity<String> uploadLogs( ){
         try {
-            ps.save();
-            return new ResponseEntity<>("upload success", HttpStatus.CREATED);
+           int recordsToAdd = ps.save();
+           if(recordsToAdd > 0){
+               return new ResponseEntity<>("upload success", HttpStatus.CREATED);
+           }
+           return new ResponseEntity<>("no records to add",HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("upload failed",HttpStatus.CONFLICT);
         }
