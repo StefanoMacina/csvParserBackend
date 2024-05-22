@@ -61,7 +61,6 @@ public class ErrorEntity {
                 Objects.equals(duration, that.duration) &&
                 Objects.equals(state, that.state) &&
                 Objects.equals(date, that.date);
-
     }
 
     @Override

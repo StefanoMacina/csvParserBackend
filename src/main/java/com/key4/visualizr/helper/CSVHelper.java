@@ -93,7 +93,7 @@ public class CSVHelper {
                 );
                 logsEntities.add(logEntity);
             }
-
+            reader.close();
             return logsEntities;
         } catch (IOException e) {
             e.printStackTrace();
