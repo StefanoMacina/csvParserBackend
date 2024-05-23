@@ -23,7 +23,7 @@ public class PartlogsEntity {
     private int logIndex;
 
     @Column(name = "Bar length")
-    private double bar_length;
+    private double barLength;
 
     @Column(name = "Length")
     private double length;
@@ -108,14 +108,14 @@ public class PartlogsEntity {
     private String workingDuration;
 
 
-    public PartlogsEntity(int logIndex, double bar_length, double length, boolean restPiece, String jobCode, String article,
+    public PartlogsEntity(int logIndex, double barLength, double length, boolean restPiece, String jobCode, String article,
                           @Nullable String barcode, String profileCode, @Nullable String colour, @Nullable LocalDateTime start_time,
                           @Nullable LocalDateTime end_time, @Nullable String totalSpan, @Nullable String totalProducingSpan,
                           @Nullable String overfeed, String operator, boolean completed, boolean redone, @Nullable String redoneReason,
                           @Nullable String armingStartTime, @Nullable String armingEndTime, @Nullable String armingDuration,
                           @Nullable String workingStartTime, @Nullable String workingEndTime, @Nullable String workingDuration) {
         this.logIndex = logIndex;
-        this.bar_length = bar_length;
+        this.barLength = barLength;
         this.length = length;
         this.restPiece = restPiece;
         this.jobCode = jobCode;

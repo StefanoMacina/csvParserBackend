@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PartlogsService implements IPartlogsService {
@@ -40,63 +41,87 @@ public class PartlogsService implements IPartlogsService {
         }
     }
 
-    @Override
-    public List<PartlogsEntity> getAllLogs() {
-        return pl.findAll();
-    }
 
     @Override
-    public Page<PartlogsEntity> getAllPaginated(int page, int size, int directionNumber, String... orderBy) {
+    public Page<PartlogsEntity> getAll(int page, int size, LocalDate fromDate,
+                                           LocalDate toDate, String range,
+                                           String keyword, int direction, String... orderby) {
 
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
-                directionNumber != -1 ? "asc" : "desc"
-        ),orderBy));
+                PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
+                        direction != -1 ? "asc" : "desc"
+                ), orderby);
 
-        return pl.findAll(pageRequest);
-    }
+        if (keyword == null || keyword.isBlank()) {
+            return pl.getInRange(fromDate, toDate, pr);
+        }
 
-    @Override
-    public Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fromDate, LocalDate toDate,  String keyword, int page,
-                                                int size, int directionNumber, String... orderBy) {
-
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
-                directionNumber != -1 ? "asc" : "desc"
-        ),orderBy));
-
-        return pl.getPartLogsBetweenSTime(fromDate, toDate, keyword,pageRequest);
-    }
-
-    @Override
-    public Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, String keyword, int page,
-                                                                int size, int directionNumber, String... orderBy) {
-
-        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
-                directionNumber != -1 ? "asc" : "desc"
-        ),orderBy));
-
-        return pl.getPartLogsBetweenETime(fromDate, toDate, keyword,pageRequest);
-    }
-
-    @Override
-    public Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword, int direction, String... orderBy) {
-
-        PageRequest pageRequest = PageRequest.of(page,size,Sort.Direction.fromString(
-                direction != -1 ? "asc" : "desc"
-        ),orderBy);
-
-        return pl.search(String.valueOf(keyword),pageRequest);
+        if ("startTime".equals(range)) {
+            return pl.getInRangeWithSearchInSTime(fromDate, toDate, keyword, pr);
+        } else {
+            return pl.getInRangeWithSearchInETime(fromDate, toDate, keyword, pr);
+        }
     }
 
 
 
-    @Override
-    public Page<PartlogsEntity> fulltextInRange(int page, int size, String keyword, int direction,
-                                                LocalDate fromDate, LocalDate toDate, String... orderBy) {
-        PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
-                direction != -1 ? "asc" : "desc"
-        ), orderBy);
 
-        return pl.searchInRange(keyword,pr,fromDate,toDate);
-    }
+//    @Override
+//    public List<PartlogsEntity> getAllLogs() {
+//        return pl.findAll();
+//    }
+//
+//    @Override
+//    public Page<PartlogsEntity> getAllPaginated(int page, int size, int directionNumber, String... orderBy) {
+//
+//        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
+//                directionNumber != -1 ? "asc" : "desc"
+//        ),orderBy));
+//
+//        return pl.findAll(pageRequest);
+//    }
+//
+//    @Override
+//    public Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fromDate, LocalDate toDate,  String keyword, int page,
+//                                                int size, int directionNumber, String... orderBy) {
+//
+//        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
+//                directionNumber != -1 ? "asc" : "desc"
+//        ),orderBy));
+//
+//        return pl.getPartLogsBetweenSTime(fromDate, toDate, keyword,pageRequest);
+//    }
+//
+//    @Override
+//    public Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, String keyword, int page,
+//                                                                int size, int directionNumber, String... orderBy) {
+//
+//        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
+//                directionNumber != -1 ? "asc" : "desc"
+//        ),orderBy));
+//
+//        return pl.getPartLogsBetweenETime(fromDate, toDate, keyword,pageRequest);
+//    }
+//
+//    @Override
+//    public Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword, int direction, String... orderBy) {
+//
+//        PageRequest pageRequest = PageRequest.of(page,size,Sort.Direction.fromString(
+//                direction != -1 ? "asc" : "desc"
+//        ),orderBy);
+//
+//        return pl.search(String.valueOf(keyword),pageRequest);
+//    }
+//
+//
+//
+//    @Override
+//    public Page<PartlogsEntity> fulltextInRange(int page, int size, String keyword, int direction,
+//                                                LocalDate fromDate, LocalDate toDate, String... orderBy) {
+//        PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
+//                direction != -1 ? "asc" : "desc"
+//        ), orderBy);
+//
+//        return pl.searchInRange(keyword,pr,fromDate,toDate);
+//    }
 
 }

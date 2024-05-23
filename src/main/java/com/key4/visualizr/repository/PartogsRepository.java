@@ -13,59 +13,100 @@ import java.time.LocalDate;
 @Repository
 public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer> {
 
+
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.job_code LIKE %:keyword% " +
+            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+    nativeQuery = true)
+    Page<PartlogsEntity> getInRange(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
+            Pageable pageable
+    );
+
+    @Query(value = "SELECT * FROM partslogs e WHERE " +
+           "(e.job_code LIKE %:keyword% " +
             "OR e.article LIKE %:keyword% " +
             "OR e.profile_code LIKE %:keyword% " +
-            "OR e.color LIKE %:keyword% ",
-            nativeQuery = true
-    )
-    Page<PartlogsEntity> search(@Param("keyword") String keyword, Pageable pageable);
+            "OR e.color LIKE %:keyword%) " +
+            "AND e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+            nativeQuery = true)
+    Page<PartlogsEntity> getInRangeWithSearchInSTime(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
+
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
             "(e.job_code LIKE %:keyword% " +
             "OR e.article LIKE %:keyword% " +
             "OR e.profile_code LIKE %:keyword% " +
             "OR e.color LIKE %:keyword%) " +
-            "AND e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
-            nativeQuery = true
-    )
-    Page<PartlogsEntity> searchInRange(
-            @Param("keyword") String keyword, Pageable pageable,
-            @Param("fromDate") LocalDate fromDate,
-            @Param("toDate") LocalDate toDate
-
-    );
-
-
-    @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "(e.job_code LIKE %:keyword% " +
-            "OR e.article LIKE %:keyword% " +
-            "OR e.profile_code LIKE %:keyword% " +
-            "OR e.color LIKE %:keyword%) AND "+
-            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+            "AND e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
-    Page<PartlogsEntity> getPartLogsBetweenSTime(
-            @Param("fromDate")LocalDate fromDate,
-            @Param("toDate") LocalDate toDate,
-            @Param("keyword") String keyword,
-            Pageable pageable
-            );
-
-
-    @Query(value = "SELECT * FROM partslogs e WHERE " +
-                    "(e.job_code LIKE %:keyword% " +
-                    "OR e.article LIKE %:keyword% " +
-                    "OR e.profile_code LIKE %:keyword% " +
-                    "OR e.color LIKE %:keyword%) AND " +
-                    "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
-                    nativeQuery = true)
-    Page<PartlogsEntity> getPartLogsBetweenETime(
+    Page<PartlogsEntity> getInRangeWithSearchInETime(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             @Param("keyword") String keyword,
             Pageable pageable
     );
+
+
+
+//    @Query(value = "SELECT * FROM partslogs e WHERE " +
+//            "e.job_code LIKE %:keyword% " +
+//            "OR e.article LIKE %:keyword% " +
+//            "OR e.profile_code LIKE %:keyword% " +
+//            "OR e.color LIKE %:keyword% ",
+//            nativeQuery = true
+//    )
+//    Page<PartlogsEntity> search(@Param("keyword") String keyword, Pageable pageable);
+//
+//    @Query(value = "SELECT * FROM partslogs e WHERE " +
+//            "(e.job_code LIKE %:keyword% " +
+//            "OR e.article LIKE %:keyword% " +
+//            "OR e.profile_code LIKE %:keyword% " +
+//            "OR e.color LIKE %:keyword%) " +
+//            "AND e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+//            nativeQuery = true
+//    )
+//    Page<PartlogsEntity> searchInRange(
+//            @Param("keyword") String keyword, Pageable pageable,
+//            @Param("fromDate") LocalDate fromDate,
+//            @Param("toDate") LocalDate toDate
+//
+//    );
+//
+//
+//    @Query(value = "SELECT * FROM partslogs e WHERE " +
+//            "(e.job_code LIKE %:keyword% " +
+//            "OR e.article LIKE %:keyword% " +
+//            "OR e.profile_code LIKE %:keyword% " +
+//            "OR e.color LIKE %:keyword%) AND "+
+//            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+//            nativeQuery = true)
+//    Page<PartlogsEntity> getPartLogsBetweenSTime(
+//            @Param("fromDate")LocalDate fromDate,
+//            @Param("toDate") LocalDate toDate,
+//            @Param("keyword") String keyword,
+//            Pageable pageable
+//            );
+//
+//
+//    @Query(value = "SELECT * FROM partslogs e WHERE " +
+//                    "(e.job_code LIKE %:keyword% " +
+//                    "OR e.article LIKE %:keyword% " +
+//                    "OR e.profile_code LIKE %:keyword% " +
+//                    "OR e.color LIKE %:keyword%) AND " +
+//                    "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+//                    nativeQuery = true)
+//    Page<PartlogsEntity> getPartLogsBetweenETime(
+//            @Param("fromDate") LocalDate fromDate,
+//            @Param("toDate") LocalDate toDate,
+//            @Param("keyword") String keyword,
+//            Pageable pageable
+//    );
 
 //    Optional<PartlogsEntity> getOneBylogIndexStartTime(
 //            @Param("log index") Integer logIndex,
