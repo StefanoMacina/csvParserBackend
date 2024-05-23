@@ -24,6 +24,15 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
     );
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
+            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+            nativeQuery = true)
+    Page<PartlogsEntity> getInRangeEndtime(
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
+            Pageable pageable
+    );
+
+    @Query(value = "SELECT * FROM partslogs e WHERE " +
            "(e.job_code LIKE %:keyword% " +
             "OR e.article LIKE %:keyword% " +
             "OR e.profile_code LIKE %:keyword% " +

@@ -50,9 +50,13 @@ public class PartlogsService implements IPartlogsService {
                 ), orderby);
 
         if (keyword == null || keyword.isBlank()) {
-            return pl.getInRange(fromDate, toDate, pr);
+            if ("start_time".equals(range)) {
+                return pl.getInRangeWithSearchInSTime(fromDate, toDate, keyword, pr);
+            } else {
+                return pl.getInRangeEndtime(fromDate, toDate, pr);
+            }
         }
-        if ("startTime".equals(range)) {
+        if ("start_time".equals(range)) {
             return pl.getInRangeWithSearchInSTime(fromDate, toDate, keyword, pr);
         } else {
             return pl.getInRangeWithSearchInETime(fromDate, toDate, keyword, pr);

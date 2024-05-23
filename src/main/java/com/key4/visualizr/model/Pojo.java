@@ -14,17 +14,19 @@ public class Pojo {
     @Nullable
     private Integer size = 20;
     @Nullable
-    private String orderBy = "startTime";
+    private String order_by = "start_time";
     @Nullable
     private Integer dir = -1;
     @Nullable
     private String globalfilter;
     @Nullable
-    private String range = "endTime";
+    private String range = "end_time";
+
+    // data di x periodi fà
     @Nullable
-    private LocalDate fromDate = LocalDate.now()
+    private LocalDate from_date = LocalDate.now()
             .minusWeeks(10);
     @Nullable
-    private LocalDate toDate = LocalDate.now();
+    private LocalDate to_date = LocalDate.now();
 
 }

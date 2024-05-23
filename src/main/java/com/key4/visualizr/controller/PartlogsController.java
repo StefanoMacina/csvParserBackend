@@ -32,12 +32,12 @@ public class PartlogsController {
                 Page<PartlogsEntity> getAll = ps.getAll(
                         pojo.getPage(),
                         pojo.getSize(),
-                        pojo.getFromDate(),
-                        pojo.getToDate(),
+                        pojo.getFrom_date(),
+                        pojo.getTo_date(),
                         pojo.getRange(),
                         pojo.getGlobalfilter(),
                         pojo.getDir(),
-                        pojo.getOrderBy()
+                        pojo.getOrder_by()
                 );
                 return new ResponseEntity<>(getAll,HttpStatus.OK);
             }catch (Exception e){
