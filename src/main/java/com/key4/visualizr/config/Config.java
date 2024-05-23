@@ -14,17 +14,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-@EnableWebMvc
 public class Config implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "OPTIONS", "PUT")
+        registry.addMapping("/api/v1/partslogs")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
                 .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers","Access-Control-Allow-Origin")
-                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials","Access-Control-Allow-Origin");
+                        "Access-Control-Request-Headers", "Access-Control-Allow-Origin")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .allowCredentials(true);
     }
 
 }

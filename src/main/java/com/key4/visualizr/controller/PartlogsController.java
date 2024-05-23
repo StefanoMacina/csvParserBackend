@@ -10,14 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.image.ReplicateScaleFilter;
-import java.time.LocalDate;
+
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+
 
 @RestController
-@RequestMapping("/api/v1")
-@CrossOrigin(origins = "*")
+@RequestMapping(value = "/api/v1", method = RequestMethod.OPTIONS)
 public class PartlogsController {
 
     @Autowired
@@ -25,21 +23,7 @@ public class PartlogsController {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-//    @GetMapping("/partlogs")
-//    public ResponseEntity<List<PartlogsEntity>> getAllLogs(){
-//        try {
-//            List<PartlogsEntity> logsList = ps.getAllLogs();
-//
-//            if(logsList.isEmpty()){
-//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//            }
-//            return new ResponseEntity<>(logsList,HttpStatus.OK);
-//        }catch (Exception e){
-//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
-    @PostMapping("/partslogs")
+    @PostMapping(value = "/partslogs")
     public ResponseEntity<Page<PartlogsEntity>> getAll(
             @RequestBody Pojo pojo
     ){

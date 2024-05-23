@@ -31,8 +31,6 @@ public class PartlogsService implements IPartlogsService {
 
             pl.saveAll(logsEntities);
 
-            System.out.println(logsEntities.size() + " ------------ " + dbEntities.size());
-
             return logsEntities.size();
 
         } catch (Exception e) {
@@ -54,15 +52,12 @@ public class PartlogsService implements IPartlogsService {
         if (keyword == null || keyword.isBlank()) {
             return pl.getInRange(fromDate, toDate, pr);
         }
-
         if ("startTime".equals(range)) {
             return pl.getInRangeWithSearchInSTime(fromDate, toDate, keyword, pr);
         } else {
             return pl.getInRangeWithSearchInETime(fromDate, toDate, keyword, pr);
         }
     }
-
-
 
 
 //    @Override

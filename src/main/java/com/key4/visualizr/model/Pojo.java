@@ -25,7 +25,6 @@ public class Pojo {
     private LocalDate fromDate = LocalDate.now()
             .minusWeeks(10);
     @Nullable
-    private LocalDate toDate = LocalDate.now()
-            ;
+    private LocalDate toDate = LocalDate.now();
 
 }

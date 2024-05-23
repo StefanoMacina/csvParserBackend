@@ -19,22 +19,22 @@ public class PartlogsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Log index")
+    @Column(name = "log_index")
     private int logIndex;
 
-    @Column(name = "Bar length")
+    @Column(name = "bar_length")
     private double barLength;
 
     @Column(name = "Length")
     private double length;
 
-    @Column(name = "Is a rest piece")
+    @Column(name = "is_a_rest_piece")
     private boolean restPiece;
 
     @Column(name = "job_code")
     private String jobCode;
 
-    @Column(name = "Article")
+    @Column(name = "article")
     private String article;
 
     @Column(name = "bar_code")
@@ -62,21 +62,21 @@ public class PartlogsEntity {
     @Nullable
     private String totalSpan;
 
-    @Column(name = "Total producing span")
+    @Column(name = "total_producing_span")
     @Nullable
     private String totalProducingSpan;
 
-    @Column(name = "Overfeed")
+    @Column(name = "overfeed")
     @Nullable
     private String overfeed;
 
-    @Column(name = "Operator")
+    @Column(name = "operator")
     private String operator;
 
-    @Column(name = "Completed")
+    @Column(name = "completed")
     private boolean completed;
 
-    @Column(name = "Redone")
+    @Column(name = "redone")
     private boolean redone;
 
     @Column(name = "Redone reason")
