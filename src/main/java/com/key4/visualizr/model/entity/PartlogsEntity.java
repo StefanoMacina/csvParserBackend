@@ -25,10 +25,10 @@ public class PartlogsEntity {
     @Column(name = "bar_length")
     private double barLength;
 
-    @Column(name = "Length")
+    @Column(name = "length")
     private double length;
 
-    @Column(name = "is_a_rest_piece")
+    @Column(name = "rest_piece")
     private boolean restPiece;
 
     @Column(name = "job_code")
@@ -37,7 +37,7 @@ public class PartlogsEntity {
     @Column(name = "article")
     private String article;
 
-    @Column(name = "bar_code")
+    @Column(name = "barcode")
     @Nullable
     private String barcode;
 
