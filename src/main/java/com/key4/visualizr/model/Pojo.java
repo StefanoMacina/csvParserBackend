@@ -25,7 +25,7 @@ public class Pojo {
     // data di x periodi fà
     @Nullable
     private LocalDate from_date = LocalDate.now()
-            .minusWeeks(10);
+            .minusWeeks(100000);
     @Nullable
     private LocalDate to_date = LocalDate.now();
 

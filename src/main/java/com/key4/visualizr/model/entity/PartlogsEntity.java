@@ -20,19 +20,19 @@ public class PartlogsEntity {
     private int id;
 
     @Column(name = "log_index")
-    private int logIndex;
+    private Integer log_index;
 
     @Column(name = "bar_length")
-    private double barLength;
+    private Double bar_length;
 
     @Column(name = "length")
-    private double length;
+    private Double length;
 
     @Column(name = "rest_piece")
-    private boolean restPiece;
+    private Boolean rest_piece;
 
     @Column(name = "job_code")
-    private String jobCode;
+    private String job_code;
 
     @Column(name = "article")
     private String article;
@@ -42,7 +42,7 @@ public class PartlogsEntity {
     private String barcode;
 
     @Column(name = "profile_code")
-    private String profileCode;
+    private String profile_code;
 
     @Column(name = "color")
     @Nullable
@@ -51,16 +51,16 @@ public class PartlogsEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "start_time")
     @Nullable
-    private LocalDateTime startTime;
+    private LocalDateTime start_time;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "end_time")
     @Nullable
-    private LocalDateTime endTime;
+    private LocalDateTime end_time;
 
     @Column(name = "total_span")
     @Nullable
-    private String totalSpan;
+    private String total_span;
 
     @Column(name = "total_producing_span")
     @Nullable
@@ -74,10 +74,11 @@ public class PartlogsEntity {
     private String operator;
 
     @Column(name = "completed")
-    private boolean completed;
+    private Boolean completed;
 
     @Column(name = "redone")
-    private boolean redone;
+    @Nullable
+    private Boolean redone;
 
     @Column(name = "Redone reason")
     @Nullable
@@ -114,18 +115,18 @@ public class PartlogsEntity {
                           @Nullable String overfeed, String operator, boolean completed, boolean redone, @Nullable String redoneReason,
                           @Nullable String armingStartTime, @Nullable String armingEndTime, @Nullable String armingDuration,
                           @Nullable String workingStartTime, @Nullable String workingEndTime, @Nullable String workingDuration) {
-        this.logIndex = logIndex;
-        this.barLength = barLength;
+        this.log_index = logIndex;
+        this.bar_length = barLength;
         this.length = length;
-        this.restPiece = restPiece;
-        this.jobCode = jobCode;
+        this.rest_piece = restPiece;
+        this.job_code = jobCode;
         this.article = article;
         this.barcode = barcode;
-        this.profileCode = profileCode;
+        this.profile_code = profileCode;
         this.colour = colour;
-        this.startTime = start_time;
-        this.endTime = end_time;
-        this.totalSpan = totalSpan;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.total_span = totalSpan;
         this.totalProducingSpan = totalProducingSpan;
         this.overfeed = overfeed;
         this.operator = operator;
@@ -145,15 +146,15 @@ public class PartlogsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PartlogsEntity that = (PartlogsEntity) o;
-        return Objects.equals(logIndex, that.logIndex) &&
-                Objects.equals(startTime, that.startTime) &&
-                Objects.equals(endTime, that.endTime) &&
+        return Objects.equals(log_index, that.log_index) &&
+                Objects.equals(start_time, that.start_time) &&
+                Objects.equals(end_time, that.end_time) &&
                 Objects.equals(article, that.article);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(logIndex, startTime, endTime, article);
+        return Objects.hash(log_index, start_time, end_time, article);
     }
 }
 

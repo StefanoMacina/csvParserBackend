@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PartlogsService implements IPartlogsService {
@@ -47,19 +46,19 @@ public class PartlogsService implements IPartlogsService {
 
                 PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
                         direction != -1 ? "asc" : "desc"
-                ), orderby);
+                ),orderby);
 
         if (keyword == null || keyword.isBlank()) {
             if ("start_time".equals(range)) {
-                return pl.getInRangeWithSearchInSTime(fromDate, toDate, keyword, pr);
+                return pl.findByStartTimeBetween(fromDate, toDate, pr);
             } else {
-                return pl.getInRangeEndtime(fromDate, toDate, pr);
+                return pl.findByEndTimeBetween(fromDate, toDate, pr);
             }
         }
         if ("start_time".equals(range)) {
-            return pl.getInRangeWithSearchInSTime(fromDate, toDate, keyword, pr);
+            return pl.searchInRangeByStartTime(fromDate, toDate, keyword, pr);
         } else {
-            return pl.getInRangeWithSearchInETime(fromDate, toDate, keyword, pr);
+            return pl.searchInRangeByEndTime(fromDate, toDate, keyword, pr);
         }
     }
 

@@ -15,18 +15,18 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
 
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
-    nativeQuery = true)
-    Page<PartlogsEntity> getInRange(
+            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+            nativeQuery = true)
+    Page<PartlogsEntity> findByStartTimeBetween(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             Pageable pageable
     );
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
-    Page<PartlogsEntity> getInRangeEndtime(
+    Page<PartlogsEntity> findByEndTimeBetween(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             Pageable pageable
@@ -34,12 +34,18 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
            "(e.job_code LIKE %:keyword% " +
+            "OR e.log_index LIKE %:keyword% " +
+            "OR e.bar_length LIKE %:keyword% " +
+            "OR e.rest_piece LIKE %:keyword% " +
+            "OR e.barcode LIKE %:keyword% " +
             "OR e.article LIKE %:keyword% " +
             "OR e.profile_code LIKE %:keyword% " +
+            "OR e.start_time LIKE %:keyword% " +
+            "OR e.end_time LIKE %:keyword% " +
             "OR e.color LIKE %:keyword%) " +
             "AND e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
-    Page<PartlogsEntity> getInRangeWithSearchInSTime(
+    Page<PartlogsEntity> searchInRangeByStartTime(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             @Param("keyword") String keyword,
@@ -49,12 +55,18 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
             "(e.job_code LIKE %:keyword% " +
+            "OR e.log_index LIKE %:keyword% " +
+            "OR e.bar_length LIKE %:keyword% " +
+            "OR e.rest_piece LIKE %:keyword% " +
+            "OR e.barcode LIKE %:keyword% " +
             "OR e.article LIKE %:keyword% " +
             "OR e.profile_code LIKE %:keyword% " +
-            "OR e.color LIKE %:keyword%) " +
+            "OR e.start_time LIKE %:keyword% " +
+            "OR e.end_time LIKE %:keyword% " +
+            "OR e.colour LIKE %:keyword%) " +
             "AND e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
-    Page<PartlogsEntity> getInRangeWithSearchInETime(
+    Page<PartlogsEntity> searchInRangeByEndTime(
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             @Param("keyword") String keyword,
