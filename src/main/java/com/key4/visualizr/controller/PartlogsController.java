@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 
@@ -22,6 +26,12 @@ public class PartlogsController {
     PartlogsService ps;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    @GetMapping(path = "/sse-api", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamFlux() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(sequence -> "Flux - " + LocalTime.now().toString());
+    }
 
     @PostMapping(value = "/partslogs")
     public ResponseEntity<Page<PartlogsEntity>> getAll(
@@ -46,6 +56,16 @@ public class PartlogsController {
             }
     }
 
+    @PostMapping("/partslogupload")
+    public ResponseEntity<String> uploadLogs( ){
+        try {
+            int recordsToAdd = ps.save();
+            if(recordsToAdd > 0) return new ResponseEntity<>("upload success", HttpStatus.CREATED);
+            return new ResponseEntity<>("no records to add",HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("upload failed",HttpStatus.CONFLICT);
+        }
+    }
 
 
 //    @GetMapping("/pagpartlogs")
@@ -147,14 +167,5 @@ public class PartlogsController {
 //    }
 
 
-    @PostMapping("/partslogupload")
-    public ResponseEntity<String> uploadLogs( ){
-        try {
-           int recordsToAdd = ps.save();
-           if(recordsToAdd > 0) return new ResponseEntity<>("upload success", HttpStatus.CREATED);
-           return new ResponseEntity<>("no records to add",HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("upload failed",HttpStatus.CONFLICT);
-        }
-    }
+
 }

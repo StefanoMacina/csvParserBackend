@@ -5,6 +5,7 @@ import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.repository.PartogsRepository;
 import com.key4.visualizr.service.IPartlogsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class PartlogsService implements IPartlogsService {
+public class PartlogsService implements IPartlogsService, CommandLineRunner {
 
     @Autowired
     PartogsRepository pl;
@@ -60,6 +61,11 @@ public class PartlogsService implements IPartlogsService {
         } else {
             return pl.searchInRangeByEndTime(fromDate, toDate, keyword, pr);
         }
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        save();
     }
 
 
