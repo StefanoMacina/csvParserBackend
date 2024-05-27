@@ -46,7 +46,7 @@ public class PartlogsEntity {
 
     @Column(name = "color")
     @Nullable
-    private String colour;
+    private String color;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "start_time")
@@ -123,7 +123,7 @@ public class PartlogsEntity {
         this.article = article;
         this.barcode = barcode;
         this.profile_code = profileCode;
-        this.colour = colour;
+        this.color = colour;
         this.start_time = start_time;
         this.end_time = end_time;
         this.total_span = totalSpan;

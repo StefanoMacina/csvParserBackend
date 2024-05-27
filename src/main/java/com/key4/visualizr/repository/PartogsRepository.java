@@ -63,7 +63,7 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
             "OR e.profile_code LIKE %:keyword% " +
             "OR e.start_time LIKE %:keyword% " +
             "OR e.end_time LIKE %:keyword% " +
-            "OR e.colour LIKE %:keyword%) " +
+            "OR e.color LIKE %:keyword%) " +
             "AND e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
     Page<PartlogsEntity> searchInRangeByEndTime(
