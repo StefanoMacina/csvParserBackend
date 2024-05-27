@@ -15,7 +15,7 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
 
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
+            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
     Page<PartlogsEntity> findByStartTimeBetween(
             @Param("fromDate") LocalDate fromDate,
@@ -24,7 +24,7 @@ public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer
     );
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
-            "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",
+            "e.end_time >= :fromDate AND e.end_time < :toDate + INTERVAL 1 DAY",
             nativeQuery = true)
     Page<PartlogsEntity> findByEndTimeBetween(
             @Param("fromDate") LocalDate fromDate,
