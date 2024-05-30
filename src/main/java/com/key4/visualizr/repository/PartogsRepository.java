@@ -13,6 +13,19 @@ import java.time.LocalDate;
 @Repository
 public interface PartogsRepository extends JpaRepository<PartlogsEntity, Integer> {
 
+    /*
+    *    /**
+     * @Query(value ="SELECT e.start_time, MAX(e.end_time) as end_time, " +
+     *             "e.job_code, e.article, e.barcode, e.profile_code, e.color, " +
+     *             "e.bar_length, e.length, e.rest_piece, " +
+     *             "e.total_span, e.total_producing_span, e.overfeed, e.operator, e.completed, e.redone " +
+     *             "FROM partslogs e " +
+     *             "WHERE e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY " +
+     *             "GROUP BY e.start_time, e.job_code, e.article, e.barcode, e.profile_code, e.color, " +
+     *             "e.bar_length, e.length, e.rest_piece, " +
+     *             "e.total_span, e.total_producing_span, e.overfeed, e.operator, e.completed, e.redone",
+     *             nativeQuery = true)
+     */
 
     @Query(value = "SELECT * FROM partslogs e WHERE " +
             "e.start_time >= :fromDate AND e.start_time < :toDate + INTERVAL 1 DAY",

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PartlogsService implements IPartlogsService, CommandLineRunner {
@@ -29,7 +30,47 @@ public class PartlogsService implements IPartlogsService, CommandLineRunner {
 
             logsEntities.removeIf(dbEntities::contains);
 
+            for(var el : logsEntities){
+                PartlogsEntity p = new PartlogsEntity(
+                        el.getLog_index(),
+                        el.getBar_length(),
+                        el.getLength(),
+                        el.getRest_piece(),
+                        el.getJob_code(),
+                        el.getArticle(),
+                        el.getBarcode(),
+                        el.getProfile_code(),
+                        el.getColor(),
+                        el.getStart_time(),
+                        el.getEnd_time(),
+                        el.getTotal_span(),
+                        el.getTotalProducingSpan(),
+                        el.getOverfeed(),
+                        el.getOperator(),
+                        el.getCompleted(),
+                        Boolean.TRUE.equals(el.getRedone()),
+                        el.getRedoneReason(),
+                        el.getArmingStartTime(),
+                        el.getArmingEndTime(),
+                        el.getArmingDuration(),
+                        el.getWorkingStartTime(),
+                        el.getWorkingEndTime(),
+                        el.getWorkingDuration()
+                );
+
+                for(var els : logsEntities){
+
+                    if((Objects.equals(p.getLog_index(), els.getLog_index())) &&
+                            (p.getStart_time() == els.getStart_time()) &&
+                            (Objects.equals(p.getBar_length(), els.getBar_length()))){
+
+
+                    }
+                }
+            }
+
             pl.saveAll(logsEntities);
+
 
             return logsEntities.size();
 
