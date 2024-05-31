@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,7 +49,6 @@ public class PartlogsService implements IPartlogsService, CommandLineRunner {
             pl.saveAll(uniqueEntities);
 
             return uniqueEntities.size();
-
 
         } catch (Exception e) {
             e.printStackTrace();
