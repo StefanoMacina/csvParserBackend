@@ -49,12 +49,11 @@ public class PartlogsService implements IPartlogsService, CommandLineRunner {
                             LinkedHashMap::new
                     ));
 
-            // Filtra gli elementi che non sono già presenti nel DB
+            // Filtrare gli elementi che non sono già presenti nel DB
             List<PartlogsEntity> uniqueEntities = groupedEntities.values().stream()
                     .filter(e -> !existingKeys.contains(e.getLog_index() + "-" + e.getStart_time()))
                     .collect(Collectors.toList());
 
-            // Salva gli elementi unici nel DB
             pl.saveAll(uniqueEntities);
 
             return uniqueEntities.size();

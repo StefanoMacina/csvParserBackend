@@ -2,6 +2,7 @@ package com.key4.visualizr.helper;
 
 import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.model.entity.PartlogsEntity;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -16,7 +18,7 @@ import org.apache.commons.csv.CSVRecord;
 
 public class CSVHelper {
 
-    public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\partlogs.csv";
+    public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
     public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\errors.csv";
     public static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
 
@@ -30,8 +32,7 @@ public class CSVHelper {
                         .withIgnoreEmptyLines()
                         .withAllowMissingColumnNames()
                         .withTrim());
-        )
-        {
+        ) {
             List<PartlogsEntity> logsEntities = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
@@ -46,7 +47,7 @@ public class CSVHelper {
                 String barcode = csvRecord.get("Barcode");
                 String profileCode = csvRecord.get("Profile code");
                 String colour = csvRecord.get("Colour");
-                LocalDateTime startTime = csvRecord.get("Start time").isBlank() ? null : LocalDateTime.parse(csvRecord.get("Start time"),DATE_TIME_FORMATTER) ;
+                LocalDateTime startTime = csvRecord.get("Start time").isBlank() ? null : LocalDateTime.parse(csvRecord.get("Start time"), DATE_TIME_FORMATTER);
                 LocalDateTime endTime = csvRecord.get("End time").isBlank() ? null : LocalDateTime.parse(csvRecord.get("End time"), DATE_TIME_FORMATTER);
                 String totalSpan = csvRecord.get("Total span");
                 String totalProducingSpan = csvRecord.get("Total producing span");
@@ -100,55 +101,71 @@ public class CSVHelper {
 
     }
 
-    public static List<ErrorEntity> csvToErrorlog(){
+    public static List<ErrorEntity> csvToErrorlog() {
 
-        try{
+        try {
             CSVFormat csvFormat = CSVFormat.DEFAULT
                     .withFirstRecordAsHeader()
                     .withAllowMissingColumnNames()
                     .withDelimiter(';');
-            CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATH),csvFormat);
+            CSVParser parser = new CSVParser(new FileReader(ERROR_FILE_PATH), csvFormat);
 
             List<CSVRecord> records = parser.getRecords();
 
             List<ErrorEntity> errorEntities = new ArrayList<>();
 
-            for(int i = 0;i<records.size() - 1;i++) {
+            for (int i = 1; i < records.size(); i++) {
+                CSVRecord record = records.get(i);
+                CSVRecord prevRecord = records.get(i - 1);
 
-                    CSVRecord record = records.get(i);
-                    CSVRecord nextRecord = records.get(i+1);
-
-                    if(isNumeric(record.get(0))){
-                        if(record.get(3).isEmpty()){
-                           errorEntities.add(
-                                   new ErrorEntity(
-                                           Integer.parseInt(record.get(0)),
-                                           String.format("%s %s",record.get(1), nextRecord.get(0)),
-                                           nextRecord.get(1),
-                                           Integer.parseInt(nextRecord.get(2)),
-                                           nextRecord.get(3),
-                                           LocalDateTime.parse(nextRecord.get(4),DATE_TIME_FORMATTER)
-                                   )
-                           );
-                        } else {
-                            errorEntities.add(
-                                    new ErrorEntity(
-                                            Integer.parseInt(record.get(0)),
-                                            record.get(1),
-                                            record.get(2),
-                                            Integer.parseInt(record.get(3)),
-                                            record.get(4),
-                                            LocalDateTime.parse(record.get(5),DATE_TIME_FORMATTER)
-                                    )
-                            );
-                        }
+                if (isNumeric(prevRecord.get(0))) {
+                    if (prevRecord.get(3).isEmpty()) {
+                        errorEntities.add(
+                                new ErrorEntity(
+                                        Integer.parseInt(prevRecord.get(0)),
+                                        String.format("%s %s", prevRecord.get(1), record.get(0)),
+                                        record.get(1),
+                                        Integer.parseInt(record.get(2)),
+                                        record.get(3),
+                                        LocalDateTime.parse(record.get(4), DATE_TIME_FORMATTER)
+                                )
+                        );
                     } else {
-                        i += 1;
+                        errorEntities.add(
+                                new ErrorEntity(
+                                        Integer.parseInt(prevRecord.get(0)),
+                                        prevRecord.get(1),
+                                        prevRecord.get(2),
+                                        Integer.parseInt(prevRecord.get(3)),
+                                        prevRecord.get(4),
+                                        LocalDateTime.parse(prevRecord.get(5), DATE_TIME_FORMATTER)
+                                )
+                        );
                     }
+                }
             }
+
+// iterare sull'ultimo elemento se non è stato iterato
+            if (isNumeric(records.get(records.size() - 1).get(0))) {
+                CSVRecord lastRecord = records.get(records.size() - 1);
+                if (!lastRecord.get(3).isEmpty()) {
+                    errorEntities.add(
+                            new ErrorEntity(
+                                    Integer.parseInt(lastRecord.get(0)),
+                                    lastRecord.get(1),
+                                    lastRecord.get(2),
+                                    Integer.parseInt(lastRecord.get(3)),
+                                    lastRecord.get(4),
+                                    LocalDateTime.parse(lastRecord.get(5), DATE_TIME_FORMATTER)
+                            )
+                    );
+                }
+            }
+
             return errorEntities;
 
-        }catch (Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

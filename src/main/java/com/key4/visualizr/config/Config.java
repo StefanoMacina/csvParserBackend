@@ -18,6 +18,13 @@ public class Config implements WebMvcConfigurer {
                         "Access-Control-Request-Headers", "Access-Control-Allow-Origin")
                 .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
                 .allowCredentials(true);
+        registry.addMapping("/api/v1/partslogupload")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
+                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers", "Access-Control-Allow-Origin")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .allowCredentials(true);
         registry.addMapping("/api/v1/errorsUpload")
                 .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
