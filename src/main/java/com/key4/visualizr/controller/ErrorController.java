@@ -4,6 +4,7 @@ import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.service.impl.ErrorService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -101,18 +102,37 @@ public class ErrorController {
     )
         {
             if(fromDate != null){
-                try{
-                    Page<ErrorEntity> paginatedErrorsInRange = errorService.getErrorsInRange(
-                            LocalDate.parse(fromDate,formatter),
-                            toDate != null ? LocalDate.parse(toDate,formatter) : LocalDate.now(),
-                            direction,
-                            page, size, orderBy
-                    );
-                    return new ResponseEntity<>(paginatedErrorsInRange, HttpStatus.OK);
-                } catch (Exception e){
-                    e.printStackTrace();
-                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                if(keyword != null){
+                    try{
+                        Page<ErrorEntity> searchTextInRange = errorService.searchTextInRange(
+                                LocalDate.parse(fromDate,formatter),
+                                LocalDate.parse(toDate,formatter),
+                                keyword,
+                                direction,
+                                page,
+                                size,
+                                orderBy
+                        );
+
+                        return new ResponseEntity<>(searchTextInRange,HttpStatus.OK);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                } else {
+                    try{
+                        Page<ErrorEntity> paginatedErrorsInRange = errorService.getErrorsInRange(
+                                LocalDate.parse(fromDate,formatter),
+                                toDate != null ? LocalDate.parse(toDate,formatter) : LocalDate.now(),
+                                direction,
+                                page, size, orderBy
+                        );
+                        return new ResponseEntity<>(paginatedErrorsInRange, HttpStatus.OK);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
                 }
+
             }
 
             if (keyword != null) {

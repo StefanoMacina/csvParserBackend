@@ -24,6 +24,21 @@ public interface ErrorRepository extends JpaRepository<ErrorEntity, Integer> {
     Page<ErrorEntity> search(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = "SELECT * FROM errorlogs e WHERE " +
+            "(e.description LIKE %:keyword% " +
+            "OR e.code LIKE %:keyword% " +
+            "OR e.duration LIKE %:keyword% " +
+            "OR e.state LIKE %:keyword% " +
+            "OR e.occurences LIKE %:keyword%) " +
+            "AND e.date >= :fromDate AND e.date < :toDate + INTERVAL 1 DAY",
+            nativeQuery = true
+    )
+    Page<ErrorEntity> searchTextInRange(
+            @Param("keyword") String keyword, Pageable pageable,
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate
+    );
+
+    @Query(value = "SELECT * FROM errorlogs e WHERE " +
             "e.date >= :fromDate and e.date < :toDate + INTERVAL 1 DAY ", nativeQuery = true)
     Page<ErrorEntity> getErrorsByRange(
             @Param("fromDate")LocalDate fromDate,

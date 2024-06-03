@@ -25,6 +25,8 @@ public class ErrorService implements IErrorService, CommandLineRunner {
         return errorRepository.findAll();
     }
 
+
+
     @Override
     public Page<ErrorEntity> getAllPaginated(int page, int size,
                                              int directionNumber, String... orderBy) {
@@ -59,6 +61,15 @@ public class ErrorService implements IErrorService, CommandLineRunner {
     }
 
     @Override
+    public Page<ErrorEntity> searchTextInRange(LocalDate fromdate, LocalDate toDate, String keyword, int directionNumber, int page, int size, String... orderBy) {
+
+        PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
+                directionNumber != -1 ? "asc" : "desc"
+        ),orderBy);
+        return errorRepository.searchTextInRange(keyword,pr,fromdate,toDate);
+    }
+
+    @Override
     public int save() {
         try {
 
@@ -75,6 +86,8 @@ public class ErrorService implements IErrorService, CommandLineRunner {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }
+
+
 
 
     @Override

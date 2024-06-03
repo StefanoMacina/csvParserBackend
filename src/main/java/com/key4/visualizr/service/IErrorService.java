@@ -1,6 +1,7 @@
 package com.key4.visualizr.service;
 
 import com.key4.visualizr.model.entity.ErrorEntity;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
@@ -20,6 +21,8 @@ public interface IErrorService {
                                        int page, int size,
                                        String... orderBy
     );
+
+    Page<ErrorEntity> searchTextInRange(LocalDate fromdate, LocalDate toDate, String keyword, int directionNumber, int page, int size, String... orderby);
 
     int save();
 
