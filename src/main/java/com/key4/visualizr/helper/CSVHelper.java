@@ -19,7 +19,7 @@ import org.apache.commons.csv.CSVRecord;
 public class CSVHelper {
 
     public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
-    public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\errors.csv";
+    public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
     public static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
 
     public static List<PartlogsEntity> csvToPartlog() {
