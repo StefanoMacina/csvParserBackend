@@ -79,6 +79,6 @@ public class ErrorService implements IErrorService, CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        save();
+       // save();
     }
 }

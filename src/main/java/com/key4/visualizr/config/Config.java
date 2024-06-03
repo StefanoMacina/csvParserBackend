@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class Config implements WebMvcConfigurer {
@@ -33,7 +32,14 @@ public class Config implements WebMvcConfigurer {
                         "Access-Control-Request-Headers", "Access-Control-Allow-Origin")
                 .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
                 .allowCredentials(true);
-        registry.addMapping("/sse-api")
+        registry.addMapping("/api/v1/sse-parts-api")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
+                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers", "Access-Control-Allow-Origin")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .allowCredentials(true);
+        registry.addMapping("/api/v1/sse-errors-api")
                 .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
                 .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",

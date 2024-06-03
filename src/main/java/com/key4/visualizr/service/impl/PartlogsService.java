@@ -23,12 +23,18 @@ public class PartlogsService implements IPartlogsService, CommandLineRunner {
     @Override
     public int save(){
         try {
+            // Legge CSV (pre-lavorati)
             List<PartlogsEntity> logsEntities = CSVHelper.csvToPartlog();
 
+            // Fetch dal DB (post-lavorati)
             List<PartlogsEntity> dbEntities = pl.findAll();
 
-            logsEntities.removeIf(dbEntities::contains);
+            // Creare set di chiavi uniche (log_index + start_time) per gli elementi già presenti nel DB
+            Set<String> existingKeys = dbEntities.stream()
+                    .map(e -> e.getLog_index() + "-" + e.getStart_time())
+                    .collect(Collectors.toSet());
 
+            // Raggruppa e aggiorna gli elementi del CSV
             Map<String, PartlogsEntity> groupedEntities = logsEntities.stream()
                     .collect(Collectors.toMap(
                             e -> e.getLog_index() + "-" + e.getStart_time(),
@@ -43,9 +49,12 @@ public class PartlogsService implements IPartlogsService, CommandLineRunner {
                             LinkedHashMap::new
                     ));
 
-            List<PartlogsEntity> groupedlogs = new ArrayList<>(groupedEntities.values());
-            List<PartlogsEntity> uniqueEntities = new ArrayList<>(new HashSet<>(groupedlogs));
+            // Filtra gli elementi che non sono già presenti nel DB
+            List<PartlogsEntity> uniqueEntities = groupedEntities.values().stream()
+                    .filter(e -> !existingKeys.contains(e.getLog_index() + "-" + e.getStart_time()))
+                    .collect(Collectors.toList());
 
+            // Salva gli elementi unici nel DB
             pl.saveAll(uniqueEntities);
 
             return uniqueEntities.size();
@@ -84,65 +93,5 @@ public class PartlogsService implements IPartlogsService, CommandLineRunner {
     public void run(String... args) throws Exception {
         save();
     }
-
-
-//    @Override
-//    public List<PartlogsEntity> getAllLogs() {
-//        return pl.findAll();
-//    }
-//
-//    @Override
-//    public Page<PartlogsEntity> getAllPaginated(int page, int size, int directionNumber, String... orderBy) {
-//
-//        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
-//                directionNumber != -1 ? "asc" : "desc"
-//        ),orderBy));
-//
-//        return pl.findAll(pageRequest);
-//    }
-//
-//    @Override
-//    public Page<PartlogsEntity> getAllPaginatedInSTimeRange(LocalDate fromDate, LocalDate toDate,  String keyword, int page,
-//                                                int size, int directionNumber, String... orderBy) {
-//
-//        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
-//                directionNumber != -1 ? "asc" : "desc"
-//        ),orderBy));
-//
-//        return pl.getPartLogsBetweenSTime(fromDate, toDate, keyword,pageRequest);
-//    }
-//
-//    @Override
-//    public Page<PartlogsEntity> getAllPaginatedInETimeRange(LocalDate fromDate, LocalDate toDate, String keyword, int page,
-//                                                                int size, int directionNumber, String... orderBy) {
-//
-//        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(
-//                directionNumber != -1 ? "asc" : "desc"
-//        ),orderBy));
-//
-//        return pl.getPartLogsBetweenETime(fromDate, toDate, keyword,pageRequest);
-//    }
-//
-//    @Override
-//    public Page<PartlogsEntity> fullTextResearch(int page, int size, String keyword, int direction, String... orderBy) {
-//
-//        PageRequest pageRequest = PageRequest.of(page,size,Sort.Direction.fromString(
-//                direction != -1 ? "asc" : "desc"
-//        ),orderBy);
-//
-//        return pl.search(String.valueOf(keyword),pageRequest);
-//    }
-//
-//
-//
-//    @Override
-//    public Page<PartlogsEntity> fulltextInRange(int page, int size, String keyword, int direction,
-//                                                LocalDate fromDate, LocalDate toDate, String... orderBy) {
-//        PageRequest pr = PageRequest.of(page,size,Sort.Direction.fromString(
-//                direction != -1 ? "asc" : "desc"
-//        ), orderBy);
-//
-//        return pl.searchInRange(keyword,pr,fromDate,toDate);
-//    }
 
 }

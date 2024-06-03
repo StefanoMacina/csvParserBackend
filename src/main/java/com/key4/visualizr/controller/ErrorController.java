@@ -2,16 +2,22 @@ package com.key4.visualizr.controller;
 
 import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.service.impl.ErrorService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,6 +28,34 @@ public class ErrorController {
 
     private final LocalDateTime lt = LocalDateTime.now();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    @GetMapping(path = "/sse-errors-api", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamFlux(HttpServletResponse response) {
+        SseEmitter emitter = new SseEmitter();
+        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+        sseMvcExecutor.execute(() -> {
+            try {
+             uploadErrors(emitter);
+            } catch (Exception ex) {
+                emitter.completeWithError(ex);
+            }
+        });
+        return emitter;
+    }
+
+    private void uploadErrors(SseEmitter emitter) {
+        try {
+            emitter.send(SseEmitter.event().name("progress").data(-1));
+
+            errorService.save();
+
+            emitter.send(SseEmitter.event().name("complete").data(-1));
+
+            emitter.complete();
+        } catch (IOException ex) {
+            emitter.completeWithError(ex);
+        }
+    }
 
     @GetMapping("/errorlogs")
     public ResponseEntity<List<ErrorEntity>> getAllErrors(

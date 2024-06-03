@@ -141,6 +141,8 @@ public class PartlogsEntity {
         this.workingDuration = workingDuration;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

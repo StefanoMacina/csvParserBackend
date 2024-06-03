@@ -1,171 +1,77 @@
 package com.key4.visualizr.controller;
+
 import com.key4.visualizr.model.Pojo;
-import com.key4.visualizr.model.entity.ErrorEntity;
 import com.key4.visualizr.model.entity.PartlogsEntity;
 import com.key4.visualizr.service.impl.PartlogsService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-
-import java.time.Duration;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
-@RequestMapping(value = "/api/v1", method = RequestMethod.OPTIONS)
+@RequestMapping("/api/v1")
 public class PartlogsController {
 
     @Autowired
     PartlogsService ps;
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    @GetMapping(path = "/sse-api", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> streamFlux() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(sequence -> "Flux - " + LocalTime.now().toString());
-    }
-
-    @PostMapping(value = "/partslogs")
-    public ResponseEntity<Page<PartlogsEntity>> getAll(
-            @RequestBody Pojo pojo
-    ){
-        // GET IN RANGE WITH DEFAULT VALUE AS 10 WEEKS AGO
-            try{
-                Page<PartlogsEntity> getAll = ps.getAll(
-                        pojo.getPage(),
-                        pojo.getSize(),
-                        pojo.getFrom_date(),
-                        pojo.getTo_date(),
-                        pojo.getRange(),
-                        pojo.getGlobalfilter(),
-                        pojo.getDir(),
-                        pojo.getOrder_by()
-                );
-                return new ResponseEntity<>(getAll,HttpStatus.OK);
-            }catch (Exception e){
-                e.printStackTrace();
-                return ResponseEntity.internalServerError().build();
+    @GetMapping(path = "/sse-parts-api", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamFlux(HttpServletResponse response) {
+        SseEmitter emitter = new SseEmitter();
+        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+        sseMvcExecutor.execute(() -> {
+            try {
+                uploadLogs(emitter);
+            } catch (Exception ex) {
+                emitter.completeWithError(ex);
             }
+        });
+        return emitter;
     }
 
-    @PostMapping("/partslogupload")
-    public ResponseEntity<String> uploadLogs( ){
+    private void uploadLogs(SseEmitter emitter) {
         try {
-            int recordsToAdd = ps.save();
-            if(recordsToAdd > 0) return new ResponseEntity<>("upload success", HttpStatus.CREATED);
-            return new ResponseEntity<>("no records to add",HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("upload failed",HttpStatus.CONFLICT);
+            emitter.send(SseEmitter.event().name("progress").data(-1));
+
+            ps.save();
+
+            emitter.send(SseEmitter.event().name("complete").data(-1));
+
+            emitter.complete();
+        } catch (IOException ex) {
+            emitter.completeWithError(ex);
         }
     }
 
+    @PostMapping("/partslogs")
+    public ResponseEntity<Page<PartlogsEntity>> getAll(@RequestBody Pojo pojo) {
+        try {
+            Page<PartlogsEntity> getAll = ps.getAll(pojo.getPage(), pojo.getSize(), pojo.getFrom_date(),
+                    pojo.getTo_date(), pojo.getRange(), pojo.getGlobalfilter(), pojo.getDir(), pojo.getOrder_by());
+            return new ResponseEntity<>(getAll, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
-//    @GetMapping("/pagpartlogs")
-//    public ResponseEntity<Page<PartlogsEntity>> getAllPaginated(
-//            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
-//            @RequestParam(name = "size", required = false, defaultValue = "20") int size,
-//            @RequestParam(name = "orderBy", required = false, defaultValue = "startTime") String orderBy,
-//            @RequestParam(name = "dir", required = false, defaultValue = "-1") int direction,
-//            @RequestParam(name = "globalfilter", required = false) String keyword,
-//            @RequestParam(name = "range", required = false) String range,
-//            @RequestParam(name = "fromDate", required = false) String fromDate,
-//            @RequestParam(name = "toDate", required = false) String toDate
-//    ) {
-//
-//        if (range != null && keyword != null) {
-//
-//            try {
-//                Page<PartlogsEntity> searchInRange = ps.fulltextInRange(
-//                        page, size,
-//                        keyword != null ? keyword : "",
-//                        direction,
-//                        fromDate != null ? LocalDate.parse(fromDate, formatter) : LocalDate.parse("1980-10-01", formatter),
-//                        toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.parse(LocalDate.now().toString(),formatter),
-//                        orderBy.equals("startTime") ? "start_time" : orderBy
-//                );
-//                return new ResponseEntity<>(searchInRange, HttpStatus.OK);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//
-//        if (fromDate == null && toDate == null) {
-//            try {
-//                Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction, "startTime");
-//
-//                if (paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//
-//                return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-//        switch (range) {
-//            case "startTime": {
-//                try {
-//                    Page<PartlogsEntity> startTimeRange = ps.getAllPaginatedInSTimeRange(
-//                            fromDate != null ? LocalDate.parse(fromDate, formatter) : LocalDate.parse("1980-10-01", formatter),
-//                            toDate != null ? LocalDate.parse(toDate, formatter) : LocalDate.now(),
-//                            keyword != null ? keyword : "",
-//                            page, size, direction, "start_time"
-//                    );
-//                    return new ResponseEntity<>(startTimeRange, HttpStatus.OK);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//                }
-//            }
-//            case "endTime": {
-//                try {
-//                    Page<PartlogsEntity> endTimeSearchinRange = ps.getAllPaginatedInETimeRange(
-//                            fromDate != null ? LocalDate.parse(fromDate) : LocalDate.parse("1980-10-01", formatter),
-//                            toDate != null ? LocalDate.parse(toDate) : LocalDate.parse(LocalDate.now().toString(),formatter),
-//                            keyword != null ? keyword : "",
-//                            page,size,direction
-//                            ,"end_time");
-//
-//                    return new ResponseEntity<>(endTimeSearchinRange, HttpStatus.OK);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//                }
-//            }
-//        }
-//
-//
-//
-//        if (keyword != null) {
-//            try {
-//                Page<PartlogsEntity> paginatedSearchData = ps.fullTextResearch(page, size, keyword, direction, orderBy);
-//                return new ResponseEntity<>(paginatedSearchData, HttpStatus.OK);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } else {
-//            try {
-//                Page<PartlogsEntity> paginatedDatas = ps.getAllPaginated(page, size, direction, orderBy);
-//
-//                if (paginatedDatas.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//
-//                return new ResponseEntity<>(paginatedDatas, HttpStatus.OK);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-//    }
-
-
+    @PostMapping("/partslogupload")
+    public ResponseEntity<String> uploadLogs() {
+        try {
+            int recordsToAdd = ps.save();
+            if (recordsToAdd > 0) return new ResponseEntity<>("upload success", HttpStatus.CREATED);
+            return new ResponseEntity<>("no records to add", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("upload failed", HttpStatus.CONFLICT);
+        }
+    }
 
 }

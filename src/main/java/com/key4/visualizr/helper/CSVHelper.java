@@ -16,8 +16,8 @@ import org.apache.commons.csv.CSVRecord;
 
 public class CSVHelper {
 
-    public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Parts_log.csv";
-    public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\i4Error_log.csv";
+    public static final String LOGS_FILE_PATH = "C:\\Users\\macina\\Desktop\\partlogs.csv";
+    public static final String ERROR_FILE_PATH = "C:\\Users\\macina\\Desktop\\errors.csv";
     public static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy  HH:mm:ss");
 
     public static List<PartlogsEntity> csvToPartlog() {
@@ -36,6 +36,7 @@ public class CSVHelper {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
+
                 int log_index = Integer.parseInt(csvRecord.get("Index"));
                 double bar_length = Double.parseDouble(csvRecord.get("Bar length"));
                 double length = Double.parseDouble(csvRecord.get("Length"));
@@ -87,6 +88,7 @@ public class CSVHelper {
                         working_end.isBlank() ? "" : working_end,
                         working_duration.isBlank() ? "" : working_duration
                 );
+
                 logsEntities.add(logEntity);
             }
             reader.close();
@@ -111,7 +113,7 @@ public class CSVHelper {
 
             List<ErrorEntity> errorEntities = new ArrayList<>();
 
-            for(int i = 0;i<records.size()-1;i++) {
+            for(int i = 0;i<records.size() - 1;i++) {
 
                     CSVRecord record = records.get(i);
                     CSVRecord nextRecord = records.get(i+1);
